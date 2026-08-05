@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
 require('dotenv').config();
+
+// Fix Windows Node.js DNS SRV resolution for MongoDB Atlas cluster
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {
+  // ignore if override not permitted
+}
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hospital_appointment_db';
 
@@ -44,22 +52,26 @@ const doctors = [
 // Connect to MongoDB
 async function connectDB() {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 3000 // Fast 3 second connection attempt
+    let uriToConnect = MONGODB_URI;
+    // Clean up angle brackets if present
+    uriToConnect = uriToConnect.replace('<Yogesh@23>', 'Yogesh%4023').replace('<', '').replace('>', '');
+
+    await mongoose.connect(uriToConnect, {
+      serverSelectionTimeoutMS: 5000
     });
     isMongoConnected = true;
-    console.log(`[MongoDB]: Successfully connected to database at ${MONGODB_URI}`);
+    console.log(`[MongoDB]: Successfully connected to MongoDB Atlas Cloud Database!`);
     
     // Seed initial MongoDB data if collection is empty
     const AppointmentModel = require('../models/appointment.model');
     const count = await AppointmentModel.countDocuments();
     if (count === 0) {
       await AppointmentModel.insertMany(inMemoryAppointments);
-      console.log('[MongoDB]: Seeded initial appointment records into MongoDB collection.');
+      console.log('[MongoDB]: Seeded initial appointment records into MongoDB Atlas collection.');
     }
   } catch (error) {
     isMongoConnected = false;
-    console.warn(`[MongoDB Warning]: Could not connect to MongoDB at ${MONGODB_URI}. Operating in-memory mode. (${error.message})`);
+    console.warn(`[MongoDB Warning]: Could not connect to MongoDB Atlas Cloud. Operating in-memory mode. (${error.message})`);
   }
 }
 
