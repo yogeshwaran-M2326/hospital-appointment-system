@@ -2,19 +2,19 @@
   <div class="max-w-5xl mx-auto space-y-6">
 
     <!-- Navigation Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm">
-      <div class="flex items-center gap-4">
-        <button (click)="goBack()" title="Back to Appointments" class="w-11 h-11 rounded-2xl bg-slate-100/80 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-200/60 active:scale-95">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-4 bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm">
+      <div class="flex items-start sm:items-center gap-4">
+        <button (click)="goBack()" title="Back to Appointments" class="w-11 h-11 shrink-0 rounded-2xl bg-slate-100/80 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-200/60 active:scale-95">
           <i class="pi pi-arrow-left text-base"></i>
         </button>
         <div>
           <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Appointment Details</h1>
-          <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Comprehensive view of patient booking and visit record</p>
+          <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5 leading-snug">Comprehensive view of patient booking and visit record</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button (click)="editAppointment()" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl sm:rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm cursor-pointer active:scale-95">
+      <div class="flex items-center w-full sm:w-auto border-t border-slate-100 pt-4 sm:border-0 sm:pt-0">
+        <button (click)="editAppointment()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-3 sm:py-2.5 rounded-xl sm:rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm cursor-pointer active:scale-95">
           <i class="pi pi-pencil text-xs"></i>
           <span>Edit Appointment</span>
         </button>
@@ -46,10 +46,10 @@
     </div>
 
     <!-- Main Details Container -->
-    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 overflow-hidden space-y-4">
+    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 overflow-hidden space-y-4 sm:space-y-6">
       
       <!-- Premium Hero Header Banner -->
-      <div class="p-5 sm:p-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-inner">
+      <div class="p-5 sm:p-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-5 sm:gap-4 shadow-inner">
         <div class="flex items-center gap-4">
           <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/15 backdrop-blur-md text-white flex items-center justify-center font-black text-xl border border-white/20 shadow-md shrink-0">
             {{ getInitials(appointment.patientName) }}
@@ -61,32 +61,35 @@
                 #{{ appointment.id }}
               </span>
             </div>
-            <p class="text-xs text-blue-100/90 font-semibold">Registered Patient Appointment</p>
+            <p class="text-[11px] sm:text-xs text-blue-100/90 font-semibold leading-tight mt-1 sm:mt-0">Registered Patient Appointment</p>
           </div>
         </div>
 
         <!-- Status Tag -->
-        <div>
-          <span 
-            *ngIf="appointment.status === 'Scheduled'" 
-            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-sky-500/25 border border-sky-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-sky-300 animate-pulse"></span>
-            Scheduled
-          </span>
+        <div class="w-full sm:w-auto border-t border-white/20 pt-4 sm:border-0 sm:pt-0 flex items-center justify-between sm:justify-end mt-1 sm:mt-0">
+          <span class="text-blue-100/90 font-bold text-xs sm:hidden uppercase tracking-wider">Current Status</span>
+          <div>
+            <span 
+              *ngIf="appointment.status === 'Scheduled'" 
+              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-sky-500/25 border border-sky-300/60 text-white backdrop-blur-md shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-sky-300 animate-pulse"></span>
+              Scheduled
+            </span>
 
-          <span 
-            *ngIf="appointment.status === 'Completed'" 
-            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500/25 border border-emerald-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
-            Completed
-          </span>
+            <span 
+              *ngIf="appointment.status === 'Completed'" 
+              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500/25 border border-emerald-300/60 text-white backdrop-blur-md shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+              Completed
+            </span>
 
-          <span 
-            *ngIf="appointment.status === 'Cancelled'" 
-            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-rose-500/25 border border-rose-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-rose-300"></span>
-            Cancelled
-          </span>
+            <span 
+              *ngIf="appointment.status === 'Cancelled'" 
+              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-rose-500/25 border border-rose-300/60 text-white backdrop-blur-md shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-rose-300"></span>
+              Cancelled
+            </span>
+          </div>
         </div>
       </div>
 
