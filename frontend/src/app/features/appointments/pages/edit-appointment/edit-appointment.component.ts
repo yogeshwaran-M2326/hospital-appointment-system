@@ -187,11 +187,17 @@ export class EditAppointmentComponent implements OnInit {
       formattedDate = `${year}-${month}-${day}`;
     }
 
+    let formattedTime = formValue.appointmentTime;
+    if (formValue.appointmentTime instanceof Date) {
+      formattedTime = formValue.appointmentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
     const updatedAppointment = {
       ...formValue,
       patientName,
       description,
-      appointmentDate: formattedDate
+      appointmentDate: formattedDate,
+      appointmentTime: formattedTime
     };
 
     this.appointmentService.updateAppointment(this.appointmentId, updatedAppointment).subscribe({
