@@ -130,9 +130,7 @@ export class AddAppointmentComponent implements OnInit {
           summary: 'Success',
           detail: 'Appointment created successfully'
         });
-        setTimeout(() => {
-          this.router.navigate(['/appointments']);
-        }, 1000);
+        this.router.navigate(['/appointments']);
       },
       error: (err) => {
         this.isSubmitting = false;

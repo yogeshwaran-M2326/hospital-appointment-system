@@ -72,7 +72,8 @@ export class AppointmentListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +84,7 @@ export class AppointmentListComponent implements OnInit {
   loadAppointments(): void {
     this.isLoading = true;
     this.hasError = false;
+    this.cdr.detectChanges();
 
     this.appointmentService.getAppointments({
       page: this.currentPage,
@@ -102,10 +104,12 @@ export class AppointmentListComponent implements OnInit {
         if (res.stats) {
           this.stats = res.stats;
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.isLoading = false;
         this.hasError = true;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -195,7 +199,13 @@ export class AppointmentListComponent implements OnInit {
 
   confirmDelete(): void {
     if (this.appointmentToDelete && this.appointmentToDelete.id) {
-      this.appointmentService.deleteAppointment(this.appointmentToDelete.id).subscribe({
+      const idToDelete = this.appointmentToDelete.id;
+      // Optimistically remove from view immediately for instant response
+      this.appointments = this.appointments.filter(a => a.id !== idToDelete);
+      this.totalRecords = Math.max(0, this.totalRecords - 1);
+      this.cdr.detectChanges();
+
+      this.appointmentService.deleteAppointment(idToDelete).subscribe({
         next: () => {
           this.loadAppointments();
         },
@@ -206,6 +216,7 @@ export class AppointmentListComponent implements OnInit {
     }
     this.showDeleteModal = false;
     this.appointmentToDelete = null;
+    this.cdr.detectChanges();
   }
 
   getInitials(name: string): string {
