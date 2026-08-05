@@ -53,6 +53,14 @@ function validateAppointment(req, res, next) {
     });
   }
 
+  const { description } = req.body;
+  if (!description || !description.trim()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Description / Visit Notes is required.'
+    });
+  }
+
   next();
 }
 

@@ -83,7 +83,7 @@ export class AddAppointmentComponent implements OnInit {
       appointmentTime: ['', [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       status: ['Scheduled', [Validators.required]],
-      description: ['']
+      description: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
