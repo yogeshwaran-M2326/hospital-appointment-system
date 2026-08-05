@@ -13,6 +13,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AppointmentService } from '../../../../core/services/appointment.service';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @Component({
   selector: 'app-edit-appointment',
@@ -27,7 +28,8 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
     ButtonModule,
     CardModule,
     MessageModule,
-    ToastModule
+    ToastModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [MessageService],
   templateUrl: './edit-appointment.component.html',
@@ -103,32 +105,12 @@ export class EditAppointmentComponent implements OnInit {
           dateObj = new Date(existing.appointmentDate);
         }
 
-        // Parse time string back to a Date object to populate p-datepicker
-        let timeDateObj: Date | null = null;
-        if (existing.appointmentTime) {
-          const timeStr = existing.appointmentTime.toUpperCase();
-          const isPM = timeStr.includes('PM');
-          const cleanTime = timeStr.replace(' AM', '').replace(' PM', '').trim();
-          const parts = cleanTime.split(':');
-          
-          if (parts.length >= 2) {
-            let h = parseInt(parts[0], 10);
-            const m = parseInt(parts[1], 10);
-            
-            if (isPM && h < 12) h += 12;
-            if (!isPM && h === 12) h = 0;
-            
-            timeDateObj = new Date();
-            timeDateObj.setHours(h, m, 0, 0);
-          }
-        }
-
         this.appointmentForm.patchValue({
           patientName: existing.patientName,
           doctorName: existing.doctorName,
           department: existing.department,
           appointmentDate: dateObj || existing.appointmentDate,
-          appointmentTime: timeDateObj || existing.appointmentTime,
+          appointmentTime: existing.appointmentTime,
           contactNumber: existing.contactNumber,
           status: existing.status,
           description: existing.description || ''

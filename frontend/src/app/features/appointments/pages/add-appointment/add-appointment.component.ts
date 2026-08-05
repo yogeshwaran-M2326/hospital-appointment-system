@@ -13,6 +13,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AppointmentService } from '../../../../core/services/appointment.service';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @Component({
   selector: 'app-add-appointment',
@@ -27,7 +28,8 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
     ButtonModule,
     CardModule,
     MessageModule,
-    ToastModule
+    ToastModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [MessageService],
   templateUrl: './add-appointment.component.html',
