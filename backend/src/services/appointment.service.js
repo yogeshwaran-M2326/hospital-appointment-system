@@ -68,7 +68,8 @@ class AppointmentService {
           stats: dbConfig.getStatsFromList(allAppointments)
         };
       } catch (err) {
-        console.error('[MongoDB Error]: Falling back to memory mode.', err);
+        console.error('[MongoDB Error]: Error in getAllAppointments.', err);
+        throw new Error('Database query failed: ' + err.message);
       }
     }
 
@@ -138,7 +139,8 @@ class AppointmentService {
         const doc = await AppointmentModel.findOne({ id: numericId }).lean();
         if (doc) return doc;
       } catch (err) {
-        console.error('[MongoDB Error]: Falling back to memory mode for findById.', err);
+        console.error('[MongoDB Error]: Error in getAppointmentById.', err);
+        throw new Error('Database query failed: ' + err.message);
       }
     }
     return dbConfig.inMemoryAppointments.find(a => a.id === numericId) || null;
@@ -185,6 +187,7 @@ class AppointmentService {
         };
       } catch (err) {
         console.error('[MongoDB Error]: Error creating document in MongoDB.', err);
+        throw new Error('Database create failed: ' + err.message);
       }
     }
 
@@ -219,6 +222,7 @@ class AppointmentService {
         }
       } catch (err) {
         console.error('[MongoDB Error]: Error updating document in MongoDB.', err);
+        throw new Error('Database update failed: ' + err.message);
       }
     }
 
@@ -254,6 +258,7 @@ class AppointmentService {
         }
       } catch (err) {
         console.error('[MongoDB Error]: Error deleting document in MongoDB.', err);
+        throw new Error('Database delete failed: ' + err.message);
       }
     }
 
