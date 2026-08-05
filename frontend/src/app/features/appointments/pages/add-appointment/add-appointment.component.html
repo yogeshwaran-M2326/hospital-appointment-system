@@ -148,15 +148,26 @@
             <label for="appointmentTime" class="text-xs font-bold text-slate-700">
               Appointment Time <span class="text-rose-500 font-bold">*</span>
             </label>
-            <div class="flex items-center w-full h-[44px] bg-slate-50 hover:bg-white border border-slate-200 hover:border-blue-400 rounded-xl px-4 gap-3 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15 transition-all shadow-sm">
-              <div class="w-6 h-6 rounded-md bg-blue-100/50 text-blue-500 flex items-center justify-center shrink-0">
+            <div class="flex items-center w-full h-[44px] bg-slate-50 hover:bg-white border border-slate-200 hover:border-blue-400 rounded-xl px-3 sm:px-4 gap-1 sm:gap-2 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15 transition-all shadow-sm">
+              <div class="w-6 h-6 rounded-md bg-blue-100/50 text-blue-500 flex items-center justify-center shrink-0 mr-1 sm:mr-2">
                 <i class="pi pi-clock text-xs"></i>
               </div>
-              <input 
-                id="appointmentTime" 
-                type="time" 
-                formControlName="appointmentTime" 
-                class="w-full bg-transparent border-none text-sm font-bold text-slate-800 placeholder:text-slate-400 outline-none p-0 cursor-pointer" />
+              <select formControlName="appointmentHour" class="bg-transparent border-none text-xs sm:text-sm font-bold text-slate-800 outline-none p-0 cursor-pointer appearance-none text-center">
+                <option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option>
+                <option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option>
+                <option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+              </select>
+              <span class="font-extrabold text-slate-500 text-sm -translate-y-0.5">:</span>
+              <select formControlName="appointmentMinute" class="bg-transparent border-none text-xs sm:text-sm font-bold text-slate-800 outline-none p-0 cursor-pointer appearance-none text-center">
+                <option value="00">00</option><option value="05">05</option><option value="10">10</option><option value="15">15</option>
+                <option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option>
+                <option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+              </select>
+              <div class="h-4 w-px bg-slate-300 mx-1 sm:mx-2"></div>
+              <select formControlName="appointmentAmpm" class="bg-transparent border-none text-xs sm:text-sm font-extrabold text-blue-600 outline-none p-0 cursor-pointer appearance-none text-center">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
             </div>
             <small *ngIf="isFieldInvalid('appointmentTime')" class="text-rose-500 text-[11px] font-semibold">
               Appointment Time is required.

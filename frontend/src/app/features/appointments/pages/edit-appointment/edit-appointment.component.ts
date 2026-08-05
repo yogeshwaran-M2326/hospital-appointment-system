@@ -88,7 +88,9 @@ export class EditAppointmentComponent implements OnInit {
       doctorName: ['', [Validators.required]],
       department: ['', [Validators.required]],
       appointmentDate: [null, [Validators.required]],
-      appointmentTime: ['', [Validators.required]],
+      appointmentHour: ['09', [Validators.required]],
+      appointmentMinute: ['00', [Validators.required]],
+      appointmentAmpm: ['AM', [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       status: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.minLength(3)]]
@@ -103,12 +105,30 @@ export class EditAppointmentComponent implements OnInit {
           dateObj = new Date(existing.appointmentDate);
         }
 
+        let h = '09';
+        let m = '00';
+        let ampm = 'AM';
+        
+        if (existing.appointmentTime) {
+          const timeStr = existing.appointmentTime.toUpperCase();
+          if (timeStr.includes('PM')) ampm = 'PM';
+          else if (timeStr.includes('AM')) ampm = 'AM';
+          
+          const parts = timeStr.replace(' AM', '').replace(' PM', '').trim().split(':');
+          if (parts.length >= 2) {
+            h = parts[0].padStart(2, '0');
+            m = parts[1].padStart(2, '0');
+          }
+        }
+
         this.appointmentForm.patchValue({
           patientName: existing.patientName,
           doctorName: existing.doctorName,
           department: existing.department,
           appointmentDate: dateObj || existing.appointmentDate,
-          appointmentTime: existing.appointmentTime,
+          appointmentHour: h,
+          appointmentMinute: m,
+          appointmentAmpm: ampm,
           contactNumber: existing.contactNumber,
           status: existing.status,
           description: existing.description || ''
@@ -172,12 +192,10 @@ export class EditAppointmentComponent implements OnInit {
     }
 
     const formValue = this.appointmentForm.value;
-
-    // Auto-capitalize first letter of patientName & description
+    
     const patientName = formValue.patientName ? formValue.patientName.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
     const description = formValue.description ? formValue.description.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
-    
-    // Format date string if Date object (Local Timezone YYYY-MM-DD)
+
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
       const d = formValue.appointmentDate;
@@ -187,13 +205,8 @@ export class EditAppointmentComponent implements OnInit {
       formattedDate = `${year}-${month}-${day}`;
     }
 
-    let formattedTime = formValue.appointmentTime;
-    if (formValue.appointmentTime instanceof Date) {
-      const d = formValue.appointmentTime;
-      const h = String(d.getHours()).padStart(2, '0');
-      const m = String(d.getMinutes()).padStart(2, '0');
-      formattedTime = `${h}:${m}`;
-    }
+    // Combine custom time controls
+    const formattedTime = `${formValue.appointmentHour}:${formValue.appointmentMinute} ${formValue.appointmentAmpm}`;
 
     const updatedAppointment = {
       ...formValue,
