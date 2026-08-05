@@ -143,10 +143,10 @@
       </div>
 
       <!-- Dropdown Filters & Reset -->
-      <div class="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div class="grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
         
         <!-- Department Select -->
-        <div class="w-full sm:w-56">
+        <div class="col-span-1 w-full sm:w-56">
           <p-select 
             [(ngModel)]="selectedDepartment" 
             [options]="departments" 
@@ -160,7 +160,7 @@
         </div>
 
         <!-- Status Select -->
-        <div class="w-full sm:w-48">
+        <div class="col-span-1 w-full sm:w-48">
           <p-select 
             [(ngModel)]="selectedStatus" 
             [options]="statuses" 
@@ -176,12 +176,12 @@
         <!-- Reset Button -->
         <button 
           (click)="resetFilters()"
-          class="w-full sm:w-auto h-[42px] inline-flex items-center justify-center gap-2 bg-slate-100/90 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-700 font-bold px-4 rounded-xl transition-all duration-200 cursor-pointer text-sm shrink-0 border border-slate-200/80 active:scale-[0.98] shadow-xs">
+          class="col-span-2 sm:col-auto w-full sm:w-auto h-[42px] inline-flex items-center justify-center gap-2 bg-slate-100/90 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-700 font-bold px-4 rounded-xl transition-all duration-200 cursor-pointer text-sm shrink-0 border border-slate-200/80 active:scale-[0.98] shadow-xs">
           <i class="pi pi-filter-slash text-xs"></i>
           <span>Reset</span>
         </button>
-
       </div>
+
     </div>
 
     <!-- Loading State -->
