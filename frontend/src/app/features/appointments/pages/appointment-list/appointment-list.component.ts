@@ -27,7 +27,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   activeActionMenuId: number | null = null;
   appointments: Appointment[] = [];
 
-  // Server-side Pagination & Sorting (Requirement 2.7 & 2.8)
   currentPage: number = 1;
   pageSize: number = 10;
   totalRecords: number = 0;
@@ -41,20 +40,16 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   sortField: string = '';
   sortOrder: 'asc' | 'desc' = 'asc';
 
-  // Screen States (Screen 6, 7, 8)
   isLoading: boolean = false;
   isTableUpdating: boolean = false;
   hasError: boolean = false;
 
-  // Debounced Search Subject
   private searchSubject = new Subject<string>();
   private searchSubscription!: Subscription;
 
-  // Screen 5: Delete Confirmation Modal State
   showDeleteModal: boolean = false;
   appointmentToDelete: Appointment | null = null;
 
-  // Summary Stats
   stats = {
     total: 0,
     scheduled: 0,
@@ -62,12 +57,10 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     cancelled: 0
   };
 
-  // Filter models
   searchTerm: string = '';
   selectedDepartment: string | null = null;
   selectedStatus: string | null = null;
 
-  // Dropdown options
   departments = [
     { label: 'Cardiology', value: 'Cardiology' },
     { label: 'Neurology', value: 'Neurology' },
@@ -91,7 +84,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Check navigation queryParams for rich success Toast notifications
     this.route.queryParams.subscribe(params => {
       const patientName = params['name'] || 'Patient';
       if (params['added'] === 'true') {
@@ -111,7 +103,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       }
     });
 
-    // 150ms Fast Debounced search execution for non-empty queries
     this.searchSubscription = this.searchSubject.pipe(
       debounceTime(150),
       distinctUntilChanged()
@@ -129,7 +120,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Load Appointments via API (Server-side Search, Filtering, Sorting & Pagination)
   loadAppointments(isInitial: boolean = false): void {
     if (isInitial) {
       this.isLoading = true;
@@ -171,11 +161,9 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
   onSearch(): void {
     if (!this.searchTerm || this.searchTerm.trim() === '') {
-      // Empty search term -> Immediately load full data (0ms delay)
       this.currentPage = 1;
       this.loadAppointments(false);
     } else {
-      // Non-empty search term -> Fast 150ms debounce
       this.searchSubject.next(this.searchTerm);
     }
   }
@@ -242,7 +230,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/appointments/view', appointment.id]);
   }
 
-  // Action Dropdown Menu Methods
   toggleActionMenu(id: number | undefined, event: MouseEvent): void {
     event.stopPropagation();
     if (id === undefined) return;
@@ -254,7 +241,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.activeActionMenuId = null;
   }
 
-  // Screen 5: Delete Confirmation Popup
   openDeleteModal(appointment: Appointment, event: MouseEvent): void {
     event.stopPropagation();
     this.appointmentToDelete = appointment;
@@ -269,7 +255,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   confirmDelete(): void {
     if (this.appointmentToDelete && this.appointmentToDelete.id) {
       const idToDelete = this.appointmentToDelete.id;
-      // Optimistically remove from view immediately for instant response
       this.appointments = this.appointments.filter(a => a.id !== idToDelete);
       this.totalRecords = Math.max(0, this.totalRecords - 1);
       this.cdr.detectChanges();
@@ -303,10 +288,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
   formatTime(time: string): string {
     if (!time) return '';
-    // If it's already AM/PM, just return it
     if (time.includes('AM') || time.includes('PM')) return time;
     
-    // Parse 24-hour time (e.g., "14:30") to 12-hour AM/PM
     const [hourStr, minStr] = time.split(':');
     let hour = parseInt(hourStr, 10);
     const ampm = hour >= 12 ? 'PM' : 'AM';

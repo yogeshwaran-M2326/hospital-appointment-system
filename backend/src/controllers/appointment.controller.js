@@ -1,9 +1,6 @@
 const appointmentService = require('../services/appointment.service');
 
 class AppointmentController {
-  /**
-   * GET /api/appointments
-   */
   async getAppointments(req, res, next) {
     try {
       const response = await appointmentService.getAllAppointments(req.query);
@@ -17,9 +14,6 @@ class AppointmentController {
     }
   }
 
-  /**
-   * GET /api/appointments/:id
-   */
   async getAppointmentById(req, res, next) {
     try {
       const appointment = await appointmentService.getAppointmentById(req.params.id);
@@ -40,9 +34,6 @@ class AppointmentController {
     }
   }
 
-  /**
-   * POST /api/appointments
-   */
   async createAppointment(req, res, next) {
     try {
       const result = await appointmentService.createAppointment(req.body);
@@ -57,9 +48,6 @@ class AppointmentController {
     }
   }
 
-  /**
-   * PUT /api/appointments/:id
-   */
   async updateAppointment(req, res, next) {
     try {
       const result = await appointmentService.updateAppointment(req.params.id, req.body);
@@ -80,9 +68,6 @@ class AppointmentController {
     }
   }
 
-  /**
-   * DELETE /api/appointments/:id
-   */
   async deleteAppointment(req, res, next) {
     try {
       const result = await appointmentService.deleteAppointment(req.params.id);

@@ -1,9 +1,6 @@
 const { doctors } = require('../config/db.config');
 
 class DoctorController {
-  /**
-   * GET /api/doctors
-   */
   getDoctors(req, res, next) {
     try {
       res.json({

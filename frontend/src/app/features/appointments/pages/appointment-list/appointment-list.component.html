@@ -3,23 +3,17 @@
 <div class="min-h-screen bg-slate-50/80 px-3 sm:px-6 lg:px-8 py-4 sm:py-8 font-sans antialiased text-slate-800">
   <div class="w-full max-w-[1850px] mx-auto space-y-5 sm:space-y-7">
 
-    <!-- Top Executive Header -->
     <div class="relative overflow-hidden bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[1.5rem] sm:rounded-3xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
-      <!-- Background Ambient Glow -->
       <div class="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <!-- Header Content -->
       <div class="flex flex-col items-start gap-3 sm:gap-4 relative z-10 w-full md:w-auto">
         
-        <!-- Row: Icon + Title Block (Strictly Side-by-Side) -->
         <div class="flex flex-nowrap items-start sm:items-center gap-3 sm:gap-4 w-full">
           
-          <!-- Icon -->
           <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 shrink-0 transform transition-transform hover:scale-105 duration-300">
             <i class="pi pi-building font-bold text-xl sm:text-2xl"></i>
           </div>
           
-          <!-- Title & Badge Block -->
           <div class="flex flex-col sm:flex-row sm:items-center items-start gap-1 sm:gap-2.5 min-w-0">
             <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight break-words">Hospital Appointments</h1>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-xs shrink-0">
@@ -30,12 +24,10 @@
 
         </div>
 
-        <!-- Description -->
         <p class="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">Manage patient schedules, filter records, and track statuses efficiently.</p>
         
       </div>
 
-      <!-- Action Button -->
       <button 
         (click)="addAppointment()"
         class="relative z-10 w-full md:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-bold px-6 py-4 sm:py-3.5 rounded-[1.25rem] sm:rounded-2xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer text-sm shrink-0">
@@ -44,10 +36,8 @@
       </button>
     </div>
 
-    <!-- Summary Stats Dashboard Cards (Restored Original Card Layout) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       
-      <!-- 1. Total Appointments Card -->
       <div 
         (click)="selectedStatus = null; onFilterChange()"
         [ngClass]="selectedStatus === null ? 'border-blue-500 ring-2 ring-blue-500/10 shadow-lg shadow-blue-500/10' : 'border-slate-200/80 hover:border-blue-300 hover:shadow-md'"
@@ -64,7 +54,6 @@
         </div>
       </div>
 
-      <!-- 2. Scheduled Card -->
       <div 
         (click)="selectedStatus = 'Scheduled'; onFilterChange()"
         [ngClass]="selectedStatus === 'Scheduled' ? 'border-sky-500 ring-2 ring-sky-500/10 shadow-lg shadow-sky-500/10' : 'border-slate-200/80 hover:border-sky-300 hover:shadow-md'"
@@ -81,7 +70,6 @@
         </div>
       </div>
 
-      <!-- 3. Completed Card -->
       <div 
         (click)="selectedStatus = 'Completed'; onFilterChange()"
         [ngClass]="selectedStatus === 'Completed' ? 'border-emerald-500 ring-2 ring-emerald-500/10 shadow-lg shadow-emerald-500/10' : 'border-slate-200/80 hover:border-emerald-300 hover:shadow-md'"
@@ -98,7 +86,6 @@
         </div>
       </div>
 
-      <!-- 4. Cancelled Card -->
       <div 
         (click)="selectedStatus = 'Cancelled'; onFilterChange()"
         [ngClass]="selectedStatus === 'Cancelled' ? 'border-rose-500 ring-2 ring-rose-500/10 shadow-lg shadow-rose-500/10' : 'border-slate-200/80 hover:border-rose-300 hover:shadow-md'"
@@ -117,10 +104,8 @@
 
     </div>
 
-    <!-- Interactive Search & Filter Control Bar (Responsive Flex) -->
     <div class="bg-white p-4 md:p-5 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch lg:items-center justify-between">
       
-      <!-- Search Input Field -->
       <div class="w-full lg:flex-1 relative">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 z-10">
           <i class="pi pi-search text-slate-400 text-base"></i>
@@ -142,10 +127,8 @@
         </button>
       </div>
 
-      <!-- Dropdown Filters & Reset -->
       <div class="grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
         
-        <!-- Department Select -->
         <div class="col-span-1 w-full sm:w-56">
           <p-select 
             [(ngModel)]="selectedDepartment" 
@@ -160,7 +143,6 @@
           </p-select>
         </div>
 
-        <!-- Status Select -->
         <div class="col-span-1 w-full sm:w-48">
           <p-select 
             [(ngModel)]="selectedStatus" 
@@ -175,7 +157,6 @@
           </p-select>
         </div>
 
-        <!-- Reset Button -->
         <button 
           (click)="resetFilters()"
           class="col-span-2 sm:col-auto w-full sm:w-auto h-[42px] inline-flex items-center justify-center gap-2 bg-slate-100/90 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-700 font-bold px-4 rounded-xl transition-all duration-200 cursor-pointer text-sm shrink-0 border border-slate-200/80 active:scale-[0.98] shadow-xs">
@@ -186,7 +167,6 @@
 
     </div>
 
-    <!-- Loading State -->
     <div *ngIf="isLoading" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-12 sm:p-16 text-center shadow-md">
       <div class="flex flex-col items-center justify-center gap-4">
         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
@@ -194,7 +174,6 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <div *ngIf="hasError && !isLoading" class="bg-white rounded-2xl sm:rounded-3xl border border-rose-200/80 p-8 sm:p-16 text-center shadow-md">
       <div class="flex flex-col items-center justify-center gap-4">
         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-2xl sm:text-3xl shadow-sm">
@@ -210,14 +189,11 @@
       </div>
     </div>
 
-    <!-- Main Container (Desktop/Tablet Table + Mobile Cards View) -->
     <div *ngIf="!isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/50 overflow-hidden">
       
-      <!-- UNIFIED TABLE VIEW: Scrollable Data Table (Visible on all screens) -->
       <div class="overflow-x-auto min-h-[350px] pb-12">
         <table class="w-full text-left border-collapse min-w-[950px]">
           
-          <!-- Table Header -->
           <thead>
             <tr class="bg-gradient-to-r from-slate-50 via-slate-100/60 to-slate-50 border-b border-slate-200/80 text-slate-500 text-[11px] uppercase tracking-wider font-extrabold">
               <th class="py-4.5 px-6 w-24">ID</th>
@@ -246,18 +222,15 @@
             </tr>
           </thead>
 
-          <!-- Table Body -->
           <tbody class="divide-y divide-slate-100/90">
             <tr *ngFor="let appointment of appointments; let i = index" class="hover:bg-blue-50/30 transition-all duration-150 text-sm text-slate-700 group">
               
-              <!-- ID -->
               <td class="py-4.5 px-6 font-mono font-bold text-xs">
                 <span class="inline-block px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 border border-slate-200/50">
                   #{{ appointment.id }}
                 </span>
               </td>
 
-              <!-- Patient -->
               <td class="py-4.5 px-6 cursor-pointer" (click)="viewDetails(appointment)">
                 <div class="flex items-center gap-3.5">
                   <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs border shadow-2xs shrink-0 group-hover:scale-105 transition-transform" [ngClass]="getAvatarBg(appointment.id)">
@@ -270,7 +243,6 @@
                 </div>
               </td>
 
-              <!-- Doctor -->
               <td class="py-4.5 px-6 font-semibold text-slate-800">
                 <div class="flex items-center gap-2">
                   <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
@@ -280,14 +252,12 @@
                 </div>
               </td>
 
-              <!-- Department -->
               <td class="py-4.5 px-6">
                 <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50/90 text-indigo-700 border border-indigo-100 shadow-2xs">
                   {{ appointment.department }}
                 </span>
               </td>
 
-              <!-- Date & Time -->
               <td class="py-4.5 px-6">
                 <div class="flex flex-col text-xs gap-1">
                   <span class="font-bold text-slate-900 flex items-center gap-1.5">
@@ -301,7 +271,6 @@
                 </div>
               </td>
 
-              <!-- Contact -->
               <td class="py-4.5 px-6 font-mono text-xs font-semibold text-slate-600">
                 <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60">
                   <i class="pi pi-phone text-slate-400 text-xs"></i>
@@ -309,7 +278,6 @@
                 </div>
               </td>
 
-              <!-- Status Tag -->
               <td class="py-4.5 px-6">
                 <span 
                   *ngIf="appointment.status === 'Scheduled'" 
@@ -333,7 +301,6 @@
                 </span>
               </td>
 
-              <!-- Actions (Three Dots Dropdown Menu) -->
               <td class="py-4.5 px-6 text-center sticky right-0 bg-white group-hover:bg-blue-50/90 shadow-[-4px_0_10px_rgba(0,0,0,0.03)] md:static md:shadow-none transition-colors"
                   [ngClass]="activeActionMenuId === appointment.id ? 'z-50' : 'z-10'">
                 <div class="relative inline-block text-left">
@@ -345,7 +312,6 @@
                     <i class="pi pi-ellipsis-v font-bold text-sm"></i>
                   </button>
 
-                  <!-- Floating Action Dropdown Menu (Smart Positioning Up/Down) -->
                   <div 
                     *ngIf="activeActionMenuId === appointment.id"
                     (click)="$event.stopPropagation()"
@@ -380,7 +346,6 @@
 
             </tr>
 
-            <!-- Table Empty State -->
             <tr *ngIf="appointments.length === 0">
               <td colspan="8" class="text-center py-20 px-4">
                 <div class="flex flex-col items-center justify-center gap-3">
@@ -402,10 +367,8 @@
         </table>
       </div>
 
-      <!-- Server-Side Pagination Bar (Requirement 2.8) -->
       <div class="p-4 sm:p-5 md:p-6 bg-slate-50/90 border-t border-slate-200/80 flex flex-col xl:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-600">
         
-        <!-- Mobile Optimized Stats Row -->
         <div class="flex flex-row items-center justify-between xl:justify-start w-full xl:w-auto gap-2">
           
           <div class="flex items-center gap-1.5 sm:gap-2 text-slate-500 bg-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-slate-200 shadow-xs text-[10px] sm:text-xs">
@@ -434,7 +397,6 @@
           </div>
         </div>
 
-        <!-- Pagination Buttons -->
         <div class="flex flex-row items-center justify-between sm:justify-center w-full xl:w-auto gap-2">
           <button 
             (click)="goToPage(currentPage - 1)" 
@@ -464,19 +426,15 @@
   </div>
 </div>
 
-<!-- Delete Confirmation Modal (Premium Horizontal Design) -->
 <div *ngIf="showDeleteModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md transition-all duration-300">
   <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 max-w-lg w-full shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-200/80 animate-in fade-in zoom-in-95 duration-300 relative overflow-hidden">
     
-    <!-- Decorative Ambient Background Glows -->
     <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-rose-50/80 to-transparent pointer-events-none"></div>
     <div class="absolute -top-20 -right-20 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="relative z-10 flex flex-col gap-5 sm:gap-6">
       
-      <!-- Hybrid Layout Content (Vertical on Mobile, Horizontal on sm+) -->
       <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5 text-center sm:text-left">
-        <!-- Icon Container -->
         <div class="relative shrink-0 group sm:mt-1">
           <div class="absolute inset-0 bg-rose-500/20 rounded-full blur-lg scale-125 animate-pulse"></div>
           <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-[1.25rem] bg-gradient-to-br from-rose-100 to-rose-50 text-rose-500 flex items-center justify-center text-2xl sm:text-3xl shadow-sm border-[3px] border-white transform transition-transform group-hover:scale-105 duration-300 mx-auto sm:mx-0">
@@ -484,17 +442,14 @@
           </div>
         </div>
 
-        <!-- Text Content -->
         <div class="flex-1 w-full">
           <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">Delete Appointment</h3>
           <p class="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
             Are you sure you want to permanently delete this appointment record? This action cannot be undone.
           </p>
 
-          <!-- Patient Highlight Card -->
           <div *ngIf="appointmentToDelete" class="mt-4 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/60 flex flex-row items-center justify-between group hover:bg-rose-50/50 hover:border-rose-200 transition-colors text-left">
             <div class="flex items-center gap-3">
-               <!-- Icon shrink removed so it doesnt get crushed on mobile -->
               <div class="w-8 h-8 rounded-lg flex items-center justify-center font-black text-[10px] border shadow-2xs shrink-0" [ngClass]="getAvatarBg(appointmentToDelete.id)">
                 {{ getInitials(appointmentToDelete.patientName) }}
               </div>
@@ -509,7 +464,6 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
       <div class="flex justify-center gap-2.5 sm:gap-3 pt-5 border-t border-slate-100/80 w-full mt-2">
         <button 
           (click)="cancelDelete()" 

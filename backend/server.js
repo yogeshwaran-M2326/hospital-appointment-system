@@ -10,15 +10,12 @@ const errorHandler = require('./src/middlewares/errorHandler.middleware');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Global Middlewares
 app.use(cors());
 app.use(express.json());
 
-// API Routes Mount
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 
-// Health Check Route
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -27,10 +24,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Centralized Error Handling Middleware
 app.use(errorHandler);
 
-// Connect to Database & Start Server
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Hospital Appointment System Node.js API server running on http://localhost:${PORT}`);

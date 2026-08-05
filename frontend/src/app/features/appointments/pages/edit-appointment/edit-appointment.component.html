@@ -3,7 +3,6 @@
 <div class="min-h-screen bg-slate-50/70 px-4 md:px-8 py-4 md:py-5 flex flex-col justify-center">
   <div class="max-w-4xl mx-auto w-full space-y-3.5">
 
-    <!-- Top Link -->
     <div>
       <button 
         (click)="onCancel()" 
@@ -13,10 +12,8 @@
       </button>
     </div>
 
-    <!-- Main Card Container (Optimal Compact Height & Padding) -->
     <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-5 md:p-6.5 space-y-4.5">
 
-      <!-- Header Section inside card -->
       <div class="flex items-center gap-3.5 pb-3 border-b border-slate-100">
         <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg font-bold shrink-0 shadow-md shadow-blue-500/20">
           <i class="pi pi-user-edit"></i>
@@ -29,7 +26,6 @@
         </div>
       </div>
 
-      <!-- Section Tab / Header -->
       <div>
         <div class="inline-flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
           <i class="pi pi-user text-xs"></i>
@@ -41,7 +37,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 md:gap-4">
 
-          <!-- 1. Patient Name -->
           <div class="flex flex-col gap-1">
             <label for="patientName" class="text-xs font-bold text-slate-700">
               Patient Name <span class="text-rose-500 font-bold">*</span>
@@ -63,7 +58,6 @@
             </small>
           </div>
 
-          <!-- 2. Doctor Name -->
           <div class="flex flex-col gap-1">
             <label for="doctorName" class="text-xs font-bold text-slate-700">
               Doctor Name <span class="text-rose-500 font-bold">*</span>
@@ -82,7 +76,6 @@
             </small>
           </div>
 
-          <!-- 3. Department -->
           <div class="flex flex-col gap-1">
             <label for="department" class="text-xs font-bold text-slate-700">
               Department <span class="text-rose-500 font-bold">*</span>
@@ -101,7 +94,6 @@
             </small>
           </div>
 
-          <!-- 4. Contact Number -->
           <div class="flex flex-col gap-1">
             <label for="contactNumber" class="text-xs font-bold text-slate-700">
               Contact Number <span class="text-rose-500 font-bold">*</span>
@@ -125,7 +117,6 @@
             </small>
           </div>
 
-          <!-- 5. Appointment Date -->
           <div class="flex flex-col gap-1">
             <label for="appointmentDate" class="text-xs font-bold text-slate-700">
               Appointment Date <span class="text-rose-500 font-bold">*</span>
@@ -145,7 +136,6 @@
             </small>
           </div>
 
-          <!-- 6. Appointment Time -->
           <div class="flex flex-col gap-1">
             <label for="appointmentTime" class="text-xs font-bold text-slate-700">
               Appointment Time <span class="text-rose-500 font-bold">*</span>
@@ -164,7 +154,6 @@
             </div>
           </div>
 
-          <!-- 7. Status -->
           <div class="flex flex-col gap-1 col-span-1">
             <label for="status" class="text-xs font-bold text-slate-700">
               Status <span class="text-rose-500 font-bold">*</span>
@@ -183,7 +172,6 @@
             </small>
           </div>
 
-          <!-- 8. Description / Notes Field -->
           <div class="flex flex-col gap-1 col-span-1">
             <label for="description" class="text-xs font-bold text-slate-700">
               Description / Notes <span class="text-rose-500 font-bold">*</span>
@@ -207,7 +195,6 @@
 
         </div>
 
-        <!-- Premium Enhanced Info Note Banner -->
         <div class="bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-slate-50/80 p-3 rounded-xl flex items-center justify-between border border-blue-100/80 shadow-2xs">
           <div class="flex items-center gap-2.5">
             <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 shadow-sm shadow-blue-500/30">
@@ -220,7 +207,6 @@
           </span>
         </div>
 
-        <!-- Action Buttons -->
         <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
           <button 
             type="button" 
