@@ -1,8 +1,10 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SelectModule } from 'primeng/select';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Appointment } from '../../../../core/models/appointment.model';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 
@@ -16,7 +18,7 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
   ],
   templateUrl: './appointment-list.component.html',
 })
-export class AppointmentListComponent implements OnInit {
+export class AppointmentListComponent implements OnInit, OnDestroy {
   activeActionMenuId: number | null = null;
   appointments: Appointment[] = [];
 
@@ -36,7 +38,12 @@ export class AppointmentListComponent implements OnInit {
 
   // Screen States (Screen 6, 7, 8)
   isLoading: boolean = false;
+  isTableUpdating: boolean = false;
   hasError: boolean = false;
+
+  // Debounced Search Subject
+  private searchSubject = new Subject<string>();
+  private searchSubscription!: Subscription;
 
   // Screen 5: Delete Confirmation Modal State
   showDeleteModal: boolean = false;
@@ -77,12 +84,31 @@ export class AppointmentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadAppointments();
+    // 300ms Debounced search execution
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.currentPage = 1;
+      this.loadAppointments(false);
+    });
+
+    this.loadAppointments(true);
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 
   // Load Appointments via API (Server-side Search, Filtering, Sorting & Pagination)
-  loadAppointments(): void {
-    this.isLoading = true;
+  loadAppointments(isInitial: boolean = false): void {
+    if (isInitial) {
+      this.isLoading = true;
+    } else {
+      this.isTableUpdating = true;
+    }
     this.hasError = false;
     this.cdr.detectChanges();
 
@@ -97,6 +123,7 @@ export class AppointmentListComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         this.isLoading = false;
+        this.isTableUpdating = false;
         this.appointments = res.data || [];
         this.totalRecords = res.totalRecords || 0;
         this.currentPage = res.currentPage || 1;
@@ -108,6 +135,7 @@ export class AppointmentListComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
+        this.isTableUpdating = false;
         this.hasError = true;
         this.cdr.detectChanges();
       }
@@ -115,24 +143,29 @@ export class AppointmentListComponent implements OnInit {
   }
 
   onSearch(): void {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   onFilterChange(): void {
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   onPageSizeChange(): void {
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadAppointments();
+      this.loadAppointments(false);
     }
   }
 
@@ -144,7 +177,7 @@ export class AppointmentListComponent implements OnInit {
     this.sortOrder = 'asc';
     this.currentPage = 1;
     this.hasError = false;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   retryFetch(): void {
