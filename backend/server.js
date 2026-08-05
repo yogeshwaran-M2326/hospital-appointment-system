@@ -171,7 +171,7 @@ app.get('/api/appointments', (req, res) => {
 
     const { search, department, status, sortField, sortOrder, page = 1, pageSize = 10 } = req.query;
 
-    // 2.5 Backend Search (Patient Name, Doctor Name, Contact Number)
+    // Backend Search (Patient Name, Doctor Name, Contact Number, ID)
     if (search && typeof search === 'string' && search.trim() !== '') {
       const term = search.toLowerCase().trim();
       result = result.filter(a =>
@@ -182,16 +182,16 @@ app.get('/api/appointments', (req, res) => {
       );
     }
 
-    // 2.6 Backend Filtering (Department & Status)
-    if (department && typeof department === 'string' && department !== 'null') {
-      result = result.filter(a => a.department === department);
+    // Backend Filtering (Department & Status)
+    if (department && typeof department === 'string' && department !== 'null' && department !== '') {
+      result = result.filter(a => a.department.toLowerCase() === department.toLowerCase());
     }
 
-    if (status && typeof status === 'string' && status !== 'null') {
-      result = result.filter(a => a.status === status);
+    if (status && typeof status === 'string' && status !== 'null' && status !== '') {
+      result = result.filter(a => a.status.toLowerCase() === status.toLowerCase());
     }
 
-    // 2.7 Backend Sorting (Patient Name, Doctor Name, Department, Appointment Date, Status)
+    // Backend Sorting (Patient Name, Doctor Name, Department, Appointment Date, Status, etc.)
     if (sortField && typeof sortField === 'string') {
       const isAsc = sortOrder === 'asc';
       result.sort((a, b) => {
@@ -203,7 +203,7 @@ app.get('/api/appointments', (req, res) => {
       });
     }
 
-    // 2.8 Server-side Pagination
+    // Server-side Pagination
     const totalRecords = result.length;
     const p = Math.max(1, parseInt(page) || 1);
     const limit = Math.max(1, parseInt(pageSize) || 10);
@@ -213,7 +213,15 @@ app.get('/api/appointments', (req, res) => {
     const paginatedData = result.slice(startIndex, startIndex + limit);
 
     res.json({
+      success: true,
+      message: 'Appointments fetched successfully',
       data: paginatedData,
+      pagination: {
+        totalRecords,
+        currentPage: p,
+        pageSize: limit,
+        totalPages
+      },
       totalRecords,
       currentPage: p,
       totalPages,
@@ -221,7 +229,10 @@ app.get('/api/appointments', (req, res) => {
       stats: getStats()
     });
   } catch (error) {
-    res.status(500).json({ message: 'Unable to process your request. Please try again later.' });
+    res.status(500).json({
+      success: false,
+      message: 'Unable to process your request. Please try again later.'
+    });
   }
 });
 
@@ -230,18 +241,29 @@ app.get('/api/appointments/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const appointment = appointments.find(a => a.id === id);
   if (!appointment) {
-    return res.status(404).json({ message: 'Appointment record not found' });
+    return res.status(404).json({
+      success: false,
+      message: 'Appointment record not found'
+    });
   }
-  res.json(appointment);
+  res.json({
+    success: true,
+    message: 'Appointment details fetched successfully',
+    data: appointment,
+    ...appointment
+  });
 });
 
-// 2.2 POST /api/appointments (Create Appointment & Auto ID Generation)
+// POST /api/appointments (Create Appointment & Auto ID Generation)
 app.post('/api/appointments', (req, res) => {
   const { patientName, doctorName, department, appointmentDate, appointmentTime, contactNumber, status, description } = req.body;
 
   // Validation
   if (!patientName || !doctorName || !department || !appointmentDate || !appointmentTime || !contactNumber || !status) {
-    return res.status(400).json({ message: 'All required fields must be provided.' });
+    return res.status(400).json({
+      success: false,
+      message: 'All required fields must be provided.'
+    });
   }
 
   const newAppointment = {
@@ -259,19 +281,23 @@ app.post('/api/appointments', (req, res) => {
   appointments.unshift(newAppointment);
 
   res.status(201).json({
+    success: true,
     message: 'Appointment created successfully',
     data: newAppointment,
     stats: getStats()
   });
 });
 
-// 2.3 PUT /api/appointments/:id (Edit Appointment)
+// PUT /api/appointments/:id (Edit Appointment)
 app.put('/api/appointments/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = appointments.findIndex(a => a.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ message: 'Appointment record not found' });
+    return res.status(404).json({
+      success: false,
+      message: 'Appointment record not found'
+    });
   }
 
   const { patientName, doctorName, department, appointmentDate, appointmentTime, contactNumber, status, description } = req.body;
@@ -289,24 +315,29 @@ app.put('/api/appointments/:id', (req, res) => {
   };
 
   res.json({
+    success: true,
     message: 'Appointment updated successfully',
     data: appointments[index],
     stats: getStats()
   });
 });
 
-// 2.4 DELETE /api/appointments/:id (Delete Appointment)
+// DELETE /api/appointments/:id (Delete Appointment)
 app.delete('/api/appointments/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = appointments.findIndex(a => a.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ message: 'Appointment record not found' });
+    return res.status(404).json({
+      success: false,
+      message: 'Appointment record not found'
+    });
   }
 
   const deleted = appointments.splice(index, 1)[0];
 
   res.json({
+    success: true,
     message: 'Appointment deleted successfully',
     data: deleted,
     stats: getStats()
@@ -315,7 +346,11 @@ app.delete('/api/appointments/:id', (req, res) => {
 
 // GET /api/doctors (Doctors List)
 app.get('/api/doctors', (req, res) => {
-  res.json(doctors);
+  res.json({
+    success: true,
+    message: 'Doctor list fetched successfully',
+    data: doctors
+  });
 });
 
 // Start Node.js Express Server
