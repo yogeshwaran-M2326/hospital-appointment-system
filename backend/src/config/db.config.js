@@ -44,6 +44,13 @@ async function connectDB() {
 
     isMongoConnected = true;
     console.log('[MongoDB]: Connected to Database Successfully!');
+
+    // Clean up any remaining dummy seed data from MongoDB collection
+    const AppointmentModel = require('../models/appointment.model');
+    await AppointmentModel.deleteMany({
+      patientName: { $in: ['John Smith', 'Sarah Jenkins'] }
+    });
+    console.log('[MongoDB]: Purged old dummy records from database.');
   } catch (error) {
     isMongoConnected = false;
     console.warn(`[MongoDB Warning]: ${error.message}. Operating in memory mode.`);
