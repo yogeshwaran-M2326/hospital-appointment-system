@@ -50,8 +50,10 @@
                 id="patientName" 
                 type="text" 
                 formControlName="patientName" 
+                (input)="onInputCapitalize('patientName')"
+                autocapitalize="words"
                 placeholder="Enter patient full name"
-                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0 capitalize" />
             </div>
             <small *ngIf="isFieldInvalid('patientName')" class="text-rose-500 text-[11px] font-semibold">
               <span *ngIf="appointmentForm.get('patientName')?.errors?.['required']">Patient Name is required.</span>
@@ -187,8 +189,10 @@
                 id="description" 
                 type="text" 
                 formControlName="description" 
+                (input)="onInputCapitalize('description')"
+                autocapitalize="sentences"
                 placeholder="Enter symptoms or visit notes"
-                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0 capitalize" />
             </div>
           </div>
 

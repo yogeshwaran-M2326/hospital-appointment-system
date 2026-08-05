@@ -92,6 +92,16 @@ export class AddAppointmentComponent implements OnInit {
     return !!(field && field.invalid && (field.dirty || field.touched || this.isSubmitting));
   }
 
+  onInputCapitalize(fieldName: string): void {
+    const value = this.appointmentForm.get(fieldName)?.value;
+    if (value && typeof value === 'string') {
+      const capitalized = value.replace(/\b\w/g, (char: string) => char.toUpperCase());
+      if (value !== capitalized) {
+        this.appointmentForm.get(fieldName)?.setValue(capitalized, { emitEvent: false });
+      }
+    }
+  }
+
   onSubmit(): void {
     this.isSubmitting = true;
 
@@ -108,6 +118,10 @@ export class AddAppointmentComponent implements OnInit {
 
     const formValue = this.appointmentForm.value;
     
+    // Auto-capitalize first letter of patientName & description
+    const patientName = formValue.patientName ? formValue.patientName.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
+    const description = formValue.description ? formValue.description.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
+
     // Format date string if Date object (Local Timezone YYYY-MM-DD)
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
@@ -120,6 +134,8 @@ export class AddAppointmentComponent implements OnInit {
 
     const newAppointment = {
       ...formValue,
+      patientName,
+      description,
       appointmentDate: formattedDate
     };
 
