@@ -161,13 +161,13 @@ export class AddAppointmentComponent implements OnInit {
       next: (res) => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Appointment Saved!',
-          detail: 'New appointment has been created successfully.',
-          life: 3000
+          summary: '🎉 Appointment Booked Successfully!',
+          detail: `Appointment scheduled for ${patientName} with ${newAppointment.doctorName}`,
+          life: 4000
         });
         setTimeout(() => {
-          this.router.navigate(['/appointments'], { queryParams: { added: 'true' } });
-        }, 1000);
+          this.router.navigate(['/appointments'], { queryParams: { added: 'true', name: patientName } });
+        }, 1100);
       },
       error: (err) => {
         this.isSubmitting = false;

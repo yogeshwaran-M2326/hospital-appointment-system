@@ -90,21 +90,22 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Check navigation queryParams for success Toast notifications
+    // Check navigation queryParams for rich success Toast notifications
     this.route.queryParams.subscribe(params => {
+      const patientName = params['name'] || 'Patient';
       if (params['added'] === 'true') {
         this.messageService.add({
           severity: 'success',
-          summary: 'Appointment Saved!',
-          detail: 'New appointment created successfully.',
-          life: 3500
+          summary: '🎉 Appointment Booked!',
+          detail: `Appointment record for ${patientName} saved successfully.`,
+          life: 4000
         });
       } else if (params['updated'] === 'true') {
         this.messageService.add({
           severity: 'success',
-          summary: 'Appointment Updated!',
-          detail: 'Appointment details updated successfully.',
-          life: 3500
+          summary: '✨ Appointment Updated!',
+          detail: `Record details for ${patientName} updated successfully.`,
+          life: 4000
         });
       }
     });
