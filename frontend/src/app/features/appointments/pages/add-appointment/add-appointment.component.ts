@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-// PrimeNG Modules
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -38,7 +37,6 @@ export class AddAppointmentComponent implements OnInit {
   appointmentForm!: FormGroup;
   isSubmitting = false;
 
-  // Custom Theme for the Timepicker to match Tailwind Blue-500
   timepickerTheme = {
     container: {
         bodyBackgroundColor: '#ffffff',
@@ -154,11 +152,9 @@ export class AddAppointmentComponent implements OnInit {
 
     const formValue = this.appointmentForm.value;
     
-    // Auto-capitalize first letter of patientName & description
     const patientName = formValue.patientName ? formValue.patientName.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
     const description = formValue.description ? formValue.description.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
 
-    // Format date string if Date object (Local Timezone YYYY-MM-DD)
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
       const d = formValue.appointmentDate;

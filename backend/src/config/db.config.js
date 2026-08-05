@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const dns = require('dns');
 require('dotenv').config();
 
-// Override DNS for Windows Node.js MongoDB Atlas SRV resolution
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 } catch (e) {}
@@ -11,11 +10,9 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hospit
 
 let isMongoConnected = false;
 
-// Empty Appointments Store (No Dummy Seed Data)
 let inMemoryAppointments = [];
 let nextId = 1;
 
-// Doctor Masters list for dropdown selection
 const doctors = [
   { id: 1, label: 'Dr. Robert Kumar (Cardiology)', value: 'Dr. Robert Kumar', department: 'Cardiology' },
   { id: 2, label: 'Dr. Emily Vance (Neurology)', value: 'Dr. Emily Vance', department: 'Neurology' },
@@ -24,9 +21,6 @@ const doctors = [
   { id: 5, label: 'Dr. John Watson (General Medicine)', value: 'Dr. John Watson', department: 'General Medicine' }
 ];
 
-/**
- * MongoDB Database Connection Function
- */
 async function connectDB() {
   try {
     let uri = MONGODB_URI.trim();
@@ -45,7 +39,6 @@ async function connectDB() {
     isMongoConnected = true;
     console.log('[MongoDB]: Connected to Database Successfully!');
 
-    // Clean up any remaining dummy seed data from MongoDB collection
     const AppointmentModel = require('../models/appointment.model');
     await AppointmentModel.deleteMany({
       patientName: { $in: ['John Smith', 'Sarah Jenkins'] }

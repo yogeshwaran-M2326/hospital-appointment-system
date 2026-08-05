@@ -1,6 +1,3 @@
-/**
- * Centralized Error Handling Middleware
- */
 function errorHandler(err, req, res, next) {
   console.error('[Error Handler]:', err);
   

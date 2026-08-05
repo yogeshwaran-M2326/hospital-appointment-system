@@ -2,15 +2,11 @@ const dbConfig = require('../config/db.config');
 const AppointmentModel = require('../models/appointment.model');
 
 class AppointmentService {
-  /**
-   * Get paginated, searched, filtered, and sorted appointment list
-   */
   async getAllAppointments(queryParams) {
     if (dbConfig.isMongoConnected()) {
       try {
         const { search, department, status, sortField, sortOrder, page = 1, pageSize = 10 } = queryParams;
 
-        // Build Mongoose Query Filter
         let filter = {};
 
         if (search && typeof search === 'string' && search.trim() !== '') {
@@ -33,14 +29,12 @@ class AppointmentService {
           filter.status = { $regex: `^${status}$`, $options: 'i' };
         }
 
-        // Sorting
         let sortOption = { id: -1 }; // Default newest first
         if (sortField && typeof sortField === 'string') {
           const order = sortOrder === 'asc' ? 1 : -1;
           sortOption = { [sortField]: order };
         }
 
-        // Pagination
         const p = Math.max(1, parseInt(page) || 1);
         const limit = Math.max(1, parseInt(pageSize) || 10);
         const skip = (p - 1) * limit;
@@ -73,7 +67,6 @@ class AppointmentService {
       }
     }
 
-    // In-Memory Fallback
     let result = [...dbConfig.inMemoryAppointments];
     const { search, department, status, sortField, sortOrder, page = 1, pageSize = 10 } = queryParams;
 
@@ -129,9 +122,6 @@ class AppointmentService {
     };
   }
 
-  /**
-   * Get single appointment by ID
-   */
   async getAppointmentById(id) {
     const numericId = parseInt(id);
     if (dbConfig.isMongoConnected()) {
@@ -146,9 +136,6 @@ class AppointmentService {
     return dbConfig.inMemoryAppointments.find(a => a.id === numericId) || null;
   }
 
-  /**
-   * Create new appointment
-   */
   async createAppointment(payload) {
     const { patientName, doctorName, department, appointmentDate, appointmentTime, contactNumber, status, description } = payload;
 
@@ -199,9 +186,6 @@ class AppointmentService {
     };
   }
 
-  /**
-   * Update appointment by ID
-   */
   async updateAppointment(id, payload) {
     const numericId = parseInt(id);
 
@@ -240,9 +224,6 @@ class AppointmentService {
     };
   }
 
-  /**
-   * Delete appointment by ID
-   */
   async deleteAppointment(id) {
     const numericId = parseInt(id);
 

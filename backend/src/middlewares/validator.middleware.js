@@ -1,6 +1,3 @@
-/**
- * Validation Middleware for Appointment Payload
- */
 function validateAppointment(req, res, next) {
   const { patientName, doctorName, department, appointmentDate, appointmentTime, contactNumber, status } = req.body;
 
