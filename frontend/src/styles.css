@@ -232,3 +232,14 @@ body > div[style*="position: fixed"][style*="bottom"] {
   opacity: 0.9 !important;
   margin-top: 0.25rem !important;
 }
+
+/* Toast Notification Mobile Optimization */
+@media screen and (max-width: 768px) {
+  .p-toast {
+    width: 90% !important;
+    left: 5% !important;
+    right: auto !important;
+    top: 20px !important;
+    transform: none !important;
+  }
+}
