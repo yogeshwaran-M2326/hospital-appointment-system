@@ -88,9 +88,7 @@ export class EditAppointmentComponent implements OnInit {
       doctorName: ['', [Validators.required]],
       department: ['', [Validators.required]],
       appointmentDate: [null, [Validators.required]],
-      appointmentHour: ['09', [Validators.required]],
-      appointmentMinute: ['00', [Validators.required]],
-      appointmentAmpm: ['AM', [Validators.required]],
+      appointmentTime: [null, [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       status: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.minLength(3)]]
@@ -105,19 +103,23 @@ export class EditAppointmentComponent implements OnInit {
           dateObj = new Date(existing.appointmentDate);
         }
 
-        let h = '09';
-        let m = '00';
-        let ampm = 'AM';
-        
+        // Parse time string back to a Date object to populate p-datepicker
+        let timeDateObj: Date | null = null;
         if (existing.appointmentTime) {
           const timeStr = existing.appointmentTime.toUpperCase();
-          if (timeStr.includes('PM')) ampm = 'PM';
-          else if (timeStr.includes('AM')) ampm = 'AM';
+          const isPM = timeStr.includes('PM');
+          const cleanTime = timeStr.replace(' AM', '').replace(' PM', '').trim();
+          const parts = cleanTime.split(':');
           
-          const parts = timeStr.replace(' AM', '').replace(' PM', '').trim().split(':');
           if (parts.length >= 2) {
-            h = parts[0].padStart(2, '0');
-            m = parts[1].padStart(2, '0');
+            let h = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10);
+            
+            if (isPM && h < 12) h += 12;
+            if (!isPM && h === 12) h = 0;
+            
+            timeDateObj = new Date();
+            timeDateObj.setHours(h, m, 0, 0);
           }
         }
 
@@ -126,9 +128,7 @@ export class EditAppointmentComponent implements OnInit {
           doctorName: existing.doctorName,
           department: existing.department,
           appointmentDate: dateObj || existing.appointmentDate,
-          appointmentHour: h,
-          appointmentMinute: m,
-          appointmentAmpm: ampm,
+          appointmentTime: timeDateObj || existing.appointmentTime,
           contactNumber: existing.contactNumber,
           status: existing.status,
           description: existing.description || ''
@@ -196,6 +196,7 @@ export class EditAppointmentComponent implements OnInit {
     const patientName = formValue.patientName ? formValue.patientName.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
     const description = formValue.description ? formValue.description.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
 
+    // Format date string if Date object (Local Timezone YYYY-MM-DD)
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
       const d = formValue.appointmentDate;
@@ -205,8 +206,16 @@ export class EditAppointmentComponent implements OnInit {
       formattedDate = `${year}-${month}-${day}`;
     }
 
-    // Combine custom time controls
-    const formattedTime = `${formValue.appointmentHour}:${formValue.appointmentMinute} ${formValue.appointmentAmpm}`;
+    let formattedTime = formValue.appointmentTime;
+    if (formValue.appointmentTime instanceof Date) {
+      const d = formValue.appointmentTime;
+      let h = d.getHours();
+      let m = String(d.getMinutes()).padStart(2, '0');
+      let ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12;
+      h = h ? h : 12; // the hour '0' should be '12'
+      formattedTime = `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+    }
 
     const updatedAppointment = {
       ...formValue,

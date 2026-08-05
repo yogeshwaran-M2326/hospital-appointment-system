@@ -80,9 +80,7 @@ export class AddAppointmentComponent implements OnInit {
       doctorName: ['', [Validators.required]],
       department: ['', [Validators.required]],
       appointmentDate: [null, [Validators.required]],
-      appointmentHour: ['09', [Validators.required]],
-      appointmentMinute: ['00', [Validators.required]],
-      appointmentAmpm: ['AM', [Validators.required]],
+      appointmentTime: [null, [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       status: ['Scheduled', [Validators.required]],
       description: ['', [Validators.required, Validators.minLength(3)]]
@@ -152,8 +150,16 @@ export class AddAppointmentComponent implements OnInit {
       formattedDate = `${year}-${month}-${day}`;
     }
 
-    // Combine custom time controls
-    const formattedTime = `${formValue.appointmentHour}:${formValue.appointmentMinute} ${formValue.appointmentAmpm}`;
+    let formattedTime = formValue.appointmentTime;
+    if (formValue.appointmentTime instanceof Date) {
+      const d = formValue.appointmentTime;
+      let h = d.getHours();
+      let m = String(d.getMinutes()).padStart(2, '0');
+      let ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12;
+      h = h ? h : 12; // the hour '0' should be '12'
+      formattedTime = `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+    }
 
     const newAppointment = {
       ...formValue,
