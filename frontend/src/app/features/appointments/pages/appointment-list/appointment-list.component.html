@@ -242,7 +242,7 @@
               </th>
               <th class="py-4.5 px-6">Contact Number</th>
               <th class="py-4.5 px-6">Status</th>
-              <th class="py-4.5 px-6 text-center w-36">Actions</th>
+              <th class="py-4.5 px-6 text-center w-36 sticky right-0 z-20 bg-slate-50 shadow-[-4px_0_10px_rgba(0,0,0,0.03)] md:static md:shadow-none">Actions</th>
             </tr>
           </thead>
 
@@ -334,7 +334,7 @@
               </td>
 
               <!-- Actions (Three Dots Dropdown Menu) -->
-              <td class="py-4.5 px-6 text-center">
+              <td class="py-4.5 px-6 text-center sticky right-0 z-10 bg-white group-hover:bg-blue-50/90 shadow-[-4px_0_10px_rgba(0,0,0,0.03)] md:static md:shadow-none transition-colors">
                 <div class="relative inline-block text-left">
                   <button 
                     (click)="toggleActionMenu(appointment.id, $event)"
