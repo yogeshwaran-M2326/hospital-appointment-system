@@ -84,9 +84,9 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // 300ms Debounced search execution
+    // 150ms Fast Debounced search execution for non-empty queries
     this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(150),
       distinctUntilChanged()
     ).subscribe(() => {
       this.currentPage = 1;
@@ -115,7 +115,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.appointmentService.getAppointments({
       page: this.currentPage,
       pageSize: this.pageSize,
-      search: this.searchTerm,
+      search: this.searchTerm ? this.searchTerm.trim() : undefined,
       department: this.selectedDepartment || undefined,
       status: this.selectedStatus || undefined,
       sortField: this.sortField || undefined,
@@ -143,13 +143,21 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   onSearch(): void {
-    this.searchSubject.next(this.searchTerm);
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      // Empty search term -> Immediately load full data (0ms delay)
+      this.currentPage = 1;
+      this.loadAppointments(false);
+    } else {
+      // Non-empty search term -> Fast 150ms debounce
+      this.searchSubject.next(this.searchTerm);
+    }
   }
 
   clearSearch(): void {
     this.searchTerm = '';
     this.currentPage = 1;
     this.loadAppointments(false);
+    this.cdr.detectChanges();
   }
 
   onFilterChange(): void {
@@ -178,6 +186,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.currentPage = 1;
     this.hasError = false;
     this.loadAppointments(false);
+    this.cdr.detectChanges();
   }
 
   retryFetch(): void {
