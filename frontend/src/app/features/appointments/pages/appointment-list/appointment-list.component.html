@@ -199,7 +199,7 @@
     <div *ngIf="!isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/50 overflow-hidden">
       
       <!-- DESKTOP & TABLET VIEW: Scrollable Data Table (Visible on md and above) -->
-      <div class="hidden md:block overflow-x-auto">
+      <div class="hidden md:block overflow-x-auto min-h-[350px] pb-12">
         <table class="w-full text-left border-collapse min-w-[950px]">
           
           <!-- Table Header -->
@@ -233,7 +233,7 @@
 
           <!-- Table Body -->
           <tbody class="divide-y divide-slate-100/90">
-            <tr *ngFor="let appointment of appointments" class="hover:bg-blue-50/30 transition-all duration-150 text-sm text-slate-700 group">
+            <tr *ngFor="let appointment of appointments; let i = index" class="hover:bg-blue-50/30 transition-all duration-150 text-sm text-slate-700 group">
               
               <!-- ID -->
               <td class="py-4.5 px-6 font-mono font-bold text-xs">
@@ -328,11 +328,12 @@
                     <i class="pi pi-ellipsis-v font-bold text-sm"></i>
                   </button>
 
-                  <!-- Floating Action Dropdown Menu -->
+                  <!-- Floating Action Dropdown Menu (Smart Positioning Up/Down) -->
                   <div 
                     *ngIf="activeActionMenuId === appointment.id"
                     (click)="$event.stopPropagation()"
-                    class="absolute right-0 mt-1 w-44 rounded-2xl bg-white shadow-xl shadow-slate-200/80 border border-slate-200/80 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 text-left">
+                    [ngClass]="i >= appointments.length - 2 && appointments.length >= 2 ? 'bottom-full mb-2' : 'top-full mt-1'"
+                    class="absolute right-0 w-44 rounded-2xl bg-white shadow-xl shadow-slate-200/80 border border-slate-200/80 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 text-left">
                     
                     <button 
                       (click)="viewDetails(appointment); activeActionMenuId = null"
