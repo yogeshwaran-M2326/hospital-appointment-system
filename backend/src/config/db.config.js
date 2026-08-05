@@ -1,6 +1,12 @@
-// In-Memory Database Store with Clean Initial State
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-let appointments = [
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hospital_appointment_db';
+
+let isMongoConnected = false;
+
+// Default In-Memory Seed Data (Used as initial seed for MongoDB or fallback)
+let inMemoryAppointments = [
   {
     id: 1,
     patientName: 'John Smith',
@@ -35,18 +41,42 @@ const doctors = [
   { id: 5, label: 'Dr. John Watson (General Medicine)', value: 'Dr. John Watson', department: 'General Medicine' }
 ];
 
-function getStats() {
+// Connect to MongoDB
+async function connectDB() {
+  try {
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 3000 // Fast 3 second connection attempt
+    });
+    isMongoConnected = true;
+    console.log(`[MongoDB]: Successfully connected to database at ${MONGODB_URI}`);
+    
+    // Seed initial MongoDB data if collection is empty
+    const AppointmentModel = require('../models/appointment.model');
+    const count = await AppointmentModel.countDocuments();
+    if (count === 0) {
+      await AppointmentModel.insertMany(inMemoryAppointments);
+      console.log('[MongoDB]: Seeded initial appointment records into MongoDB collection.');
+    }
+  } catch (error) {
+    isMongoConnected = false;
+    console.warn(`[MongoDB Warning]: Could not connect to MongoDB at ${MONGODB_URI}. Operating in-memory mode. (${error.message})`);
+  }
+}
+
+function getStatsFromList(list) {
   return {
-    total: appointments.length,
-    scheduled: appointments.filter(a => a.status === 'Scheduled').length,
-    completed: appointments.filter(a => a.status === 'Completed').length,
-    cancelled: appointments.filter(a => a.status === 'Cancelled').length
+    total: list.length,
+    scheduled: list.filter(a => a.status === 'Scheduled').length,
+    completed: list.filter(a => a.status === 'Completed').length,
+    cancelled: list.filter(a => a.status === 'Cancelled').length
   };
 }
 
 module.exports = {
-  appointments,
+  connectDB,
+  isMongoConnected: () => isMongoConnected,
+  inMemoryAppointments,
   doctors,
   getNextId: () => nextId++,
-  getStats
+  getStatsFromList
 };

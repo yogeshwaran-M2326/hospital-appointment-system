@@ -4,9 +4,9 @@ class AppointmentController {
   /**
    * GET /api/appointments
    */
-  getAppointments(req, res, next) {
+  async getAppointments(req, res, next) {
     try {
-      const response = appointmentService.getAllAppointments(req.query);
+      const response = await appointmentService.getAllAppointments(req.query);
       res.json({
         success: true,
         message: 'Appointments fetched successfully',
@@ -20,9 +20,9 @@ class AppointmentController {
   /**
    * GET /api/appointments/:id
    */
-  getAppointmentById(req, res, next) {
+  async getAppointmentById(req, res, next) {
     try {
-      const appointment = appointmentService.getAppointmentById(req.params.id);
+      const appointment = await appointmentService.getAppointmentById(req.params.id);
       if (!appointment) {
         return res.status(404).json({
           success: false,
@@ -43,9 +43,9 @@ class AppointmentController {
   /**
    * POST /api/appointments
    */
-  createAppointment(req, res, next) {
+  async createAppointment(req, res, next) {
     try {
-      const result = appointmentService.createAppointment(req.body);
+      const result = await appointmentService.createAppointment(req.body);
       res.status(201).json({
         success: true,
         message: 'Appointment created successfully',
@@ -60,9 +60,9 @@ class AppointmentController {
   /**
    * PUT /api/appointments/:id
    */
-  updateAppointment(req, res, next) {
+  async updateAppointment(req, res, next) {
     try {
-      const result = appointmentService.updateAppointment(req.params.id, req.body);
+      const result = await appointmentService.updateAppointment(req.params.id, req.body);
       if (!result) {
         return res.status(404).json({
           success: false,
@@ -83,9 +83,9 @@ class AppointmentController {
   /**
    * DELETE /api/appointments/:id
    */
-  deleteAppointment(req, res, next) {
+  async deleteAppointment(req, res, next) {
     try {
-      const result = appointmentService.deleteAppointment(req.params.id);
+      const result = await appointmentService.deleteAppointment(req.params.id);
       if (!result) {
         return res.status(404).json({
           success: false,
