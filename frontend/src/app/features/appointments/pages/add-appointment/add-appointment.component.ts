@@ -38,6 +38,22 @@ export class AddAppointmentComponent implements OnInit {
   appointmentForm!: FormGroup;
   isSubmitting = false;
 
+  // Custom Theme for the Timepicker to match Tailwind Blue-500
+  timepickerTheme = {
+    container: {
+        bodyBackgroundColor: '#ffffff',
+        buttonColor: '#3b82f6'
+    },
+    dial: {
+        dialBackgroundColor: '#3b82f6',
+    },
+    clockFace: {
+        clockFaceBackgroundColor: '#f1f5f9',
+        clockHandColor: '#3b82f6',
+        clockFaceTimeInactiveColor: '#475569'
+    }
+  };
+
   departments = [
     { label: 'Cardiology', value: 'Cardiology' },
     { label: 'Neurology', value: 'Neurology' },
