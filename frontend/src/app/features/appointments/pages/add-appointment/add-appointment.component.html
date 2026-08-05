@@ -1,0 +1,231 @@
+<p-toast></p-toast>
+
+<div class="min-h-screen bg-slate-50/70 px-4 md:px-8 py-4 md:py-5 flex flex-col justify-center">
+  <div class="max-w-4xl mx-auto w-full space-y-3.5">
+
+    <!-- Top Link -->
+    <div>
+      <button 
+        (click)="onCancel()" 
+        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-bold text-xs transition-colors cursor-pointer group">
+        <i class="pi pi-arrow-left text-xs font-bold group-hover:-translate-x-0.5 transition-transform"></i>
+        <span>Back to Appointments</span>
+      </button>
+    </div>
+
+    <!-- Main Card Container (Optimal Compact Height & Padding) -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-5 md:p-6.5 space-y-4.5">
+
+      <!-- Header Section inside card -->
+      <div class="flex items-center gap-3.5 pb-3 border-b border-slate-100">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg font-bold shrink-0 shadow-md shadow-blue-500/20">
+          <i class="pi pi-calendar-plus"></i>
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-black text-slate-900 tracking-tight">Add New Appointment</h1>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">Fill in patient details and schedule appointment</p>
+        </div>
+      </div>
+
+      <!-- Section Tab / Header -->
+      <div>
+        <div class="inline-flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
+          <i class="pi pi-user text-xs"></i>
+          <span>Appointment Information</span>
+        </div>
+      </div>
+
+      <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="space-y-4 pt-0.5">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 md:gap-4">
+
+          <!-- 1. Patient Name -->
+          <div class="flex flex-col gap-1">
+            <label for="patientName" class="text-xs font-bold text-slate-700">
+              Patient Name <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <div class="flex items-center w-full h-[40px] bg-white border border-slate-200 rounded-xl px-3.5 gap-2.5 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+              <i class="pi pi-user text-slate-400 text-xs shrink-0"></i>
+              <input 
+                id="patientName" 
+                type="text" 
+                formControlName="patientName" 
+                placeholder="Enter patient full name"
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+            </div>
+            <small *ngIf="isFieldInvalid('patientName')" class="text-rose-500 text-[11px] font-semibold">
+              <span *ngIf="appointmentForm.get('patientName')?.errors?.['required']">Patient Name is required.</span>
+              <span *ngIf="appointmentForm.get('patientName')?.errors?.['minlength']">Patient Name must be at least 2 characters.</span>
+            </small>
+          </div>
+
+          <!-- 2. Doctor Name -->
+          <div class="flex flex-col gap-1">
+            <label for="doctorName" class="text-xs font-bold text-slate-700">
+              Doctor Name <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <p-select 
+              id="doctorName" 
+              formControlName="doctorName" 
+              [options]="doctors" 
+              optionLabel="label" 
+              optionValue="value" 
+              placeholder="Select doctor" 
+              styleClass="w-full">
+            </p-select>
+            <small *ngIf="isFieldInvalid('doctorName')" class="text-rose-500 text-[11px] font-semibold">
+              Doctor Name is required.
+            </small>
+          </div>
+
+          <!-- 3. Department -->
+          <div class="flex flex-col gap-1">
+            <label for="department" class="text-xs font-bold text-slate-700">
+              Department <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <p-select 
+              id="department" 
+              formControlName="department" 
+              [options]="departments" 
+              optionLabel="label" 
+              optionValue="value" 
+              placeholder="Select department" 
+              styleClass="w-full">
+            </p-select>
+            <small *ngIf="isFieldInvalid('department')" class="text-rose-500 text-[11px] font-semibold">
+              Department is required.
+            </small>
+          </div>
+
+          <!-- 4. Contact Number -->
+          <div class="flex flex-col gap-1">
+            <label for="contactNumber" class="text-xs font-bold text-slate-700">
+              Contact Number <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <div class="flex items-center w-full h-[40px] bg-white border border-slate-200 rounded-xl px-3.5 gap-2.5 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+              <i class="pi pi-phone text-slate-400 text-xs shrink-0"></i>
+              <input 
+                id="contactNumber" 
+                type="text" 
+                formControlName="contactNumber" 
+                placeholder="Enter 10 digit mobile number"
+                maxlength="10"
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+            </div>
+            <small *ngIf="isFieldInvalid('contactNumber')" class="text-rose-500 text-[11px] font-semibold">
+              <span *ngIf="appointmentForm.get('contactNumber')?.errors?.['required']">Contact Number is required.</span>
+              <span *ngIf="appointmentForm.get('contactNumber')?.errors?.['pattern']">Contact Number should be valid (10 digits).</span>
+            </small>
+          </div>
+
+          <!-- 5. Appointment Date -->
+          <div class="flex flex-col gap-1">
+            <label for="appointmentDate" class="text-xs font-bold text-slate-700">
+              Appointment Date <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <p-datepicker 
+              id="appointmentDate" 
+              formControlName="appointmentDate" 
+              dateFormat="yy-mm-dd" 
+              placeholder="Select date" 
+              [showIcon]="true"
+              iconDisplay="input"
+              appendTo="body"
+              styleClass="w-full">
+            </p-datepicker>
+            <small *ngIf="isFieldInvalid('appointmentDate')" class="text-rose-500 text-[11px] font-semibold">
+              Appointment Date is required.
+            </small>
+          </div>
+
+          <!-- 6. Appointment Time -->
+          <div class="flex flex-col gap-1">
+            <label for="appointmentTime" class="text-xs font-bold text-slate-700">
+              Appointment Time <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <p-select 
+              id="appointmentTime" 
+              formControlName="appointmentTime" 
+              [options]="times" 
+              optionLabel="label" 
+              optionValue="value" 
+              placeholder="Select time slot" 
+              styleClass="w-full">
+            </p-select>
+            <small *ngIf="isFieldInvalid('appointmentTime')" class="text-rose-500 text-[11px] font-semibold">
+              Appointment Time is required.
+            </small>
+          </div>
+
+          <!-- 7. Status -->
+          <div class="flex flex-col gap-1 col-span-1">
+            <label for="status" class="text-xs font-bold text-slate-700">
+              Status <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <p-select 
+              id="status" 
+              formControlName="status" 
+              [options]="statuses" 
+              optionLabel="label" 
+              optionValue="value" 
+              placeholder="Select status" 
+              styleClass="w-full">
+            </p-select>
+            <small *ngIf="isFieldInvalid('status')" class="text-rose-500 text-[11px] font-semibold">
+              Status is required.
+            </small>
+          </div>
+
+          <!-- 8. Description / Notes Field -->
+          <div class="flex flex-col gap-1 col-span-1">
+            <label for="description" class="text-xs font-bold text-slate-700">
+              Description / Notes
+            </label>
+            <div class="flex items-center w-full h-[40px] bg-white border border-slate-200 rounded-xl px-3.5 gap-2.5 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+              <i class="pi pi-align-left text-slate-400 text-xs shrink-0"></i>
+              <input 
+                id="description" 
+                type="text" 
+                formControlName="description" 
+                placeholder="Enter symptoms or visit notes"
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Premium Enhanced Info Note Banner -->
+        <div class="bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-slate-50/80 p-3 rounded-xl flex items-center justify-between border border-blue-100/80 shadow-2xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 shadow-sm shadow-blue-500/30">
+              <i class="pi pi-info-circle font-bold"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-700">Fields marked with <span class="text-rose-500 font-extrabold">*</span> are required for appointment scheduling</span>
+          </div>
+          <span class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-extrabold text-blue-700 bg-white px-2.5 py-1 rounded-lg border border-blue-100 shadow-2xs">
+            <i class="pi pi-shield text-[10px]"></i> Secure Entry
+          </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
+          <button 
+            type="button" 
+            (click)="onCancel()"
+            class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2 rounded-xl transition-all cursor-pointer text-xs md:text-sm">
+            Cancel
+          </button>
+          
+          <button 
+            type="submit" 
+            [disabled]="isSubmitting"
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-2 rounded-xl shadow-md shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer text-xs md:text-sm">
+            <i class="pi pi-save font-bold text-xs"></i>
+            <span>Save Appointment</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

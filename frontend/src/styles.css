@@ -1,0 +1,188 @@
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Premium Form Controls Styling Overrides */
+.p-inputtext,
+input[type="text"]:not([class*="bg-transparent"]):not([class*="border-none"]) {
+  border-radius: 0.75rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #f8fafc !important;
+  font-size: 0.875rem !important;
+  color: #1e293b !important;
+  padding: 0.625rem 1rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.p-inputtext:hover,
+input[type="text"]:not([class*="bg-transparent"]):not([class*="border-none"]):hover {
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+}
+
+.p-inputtext:focus,
+input[type="text"]:not([class*="bg-transparent"]):not([class*="border-none"]):focus {
+  border-color: #3b82f6 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+  outline: none !important;
+}
+
+/* PrimeNG Select / Dropdown Override */
+.p-select {
+  width: 100% !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #f8fafc !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.p-select:hover {
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+}
+
+.p-select.p-focus,
+.p-select:focus-within {
+  border-color: #3b82f6 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+}
+
+.p-select .p-select-label {
+  padding: 0.5rem 0.875rem !important;
+  font-size: 0.875rem !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+.p-select .p-select-label.p-placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Custom Floating Overlay Popup Styling for Dropdowns */
+.p-select-overlay,
+.p-popover,
+.p-dropdown-panel {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  padding: 0.375rem !important;
+  overflow: hidden !important;
+  z-index: 9999 !important;
+}
+
+.p-select-option,
+.p-dropdown-item {
+  padding: 0.625rem 0.875rem !important;
+  border-radius: 0.625rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  transition: all 0.15s ease !important;
+  margin-bottom: 2px !important;
+}
+
+.p-select-option:hover,
+.p-dropdown-item:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.p-select-option.p-select-option-selected,
+.p-dropdown-item.p-highlight {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+/* PrimeNG Datepicker Styling Polish */
+.p-datepicker {
+  width: 100% !important;
+}
+
+.p-datepicker .p-datepicker-input,
+.p-datepicker input {
+  width: 100% !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #ffffff !important;
+  font-size: 0.875rem !important;
+  color: #1e293b !important;
+  padding: 0.625rem 0.875rem !important;
+  min-height: 40px !important;
+}
+
+.p-datepicker .p-datepicker-input:hover,
+.p-datepicker input:hover {
+  border-color: #cbd5e1 !important;
+}
+
+.p-datepicker .p-datepicker-input:focus,
+.p-datepicker input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+.p-datepicker-panel,
+.p-datepicker-popover {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.18), 0 8px 10px -6px rgba(15, 23, 42, 0.06) !important;
+  padding: 0.75rem !important;
+  z-index: 9999 !important;
+}
+
+/* Paginator Styling Polish */
+.p-paginator {
+  background-color: #ffffff !important;
+  border-top: 1px solid #f1f5f9 !important;
+  padding: 0.875rem 1.5rem !important;
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 2.25rem !important;
+  height: 2.25rem !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.15s ease !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight,
+.p-paginator .p-paginator-pages .p-paginator-page[aria-selected="true"] {
+  background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Completely remove PrimeUI License Badge */
+div[class*="license"],
+div[id*="license"],
+.p-license-banner,
+a[href*="primeui.org"],
+body > div[style*="position: fixed"][style*="bottom"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
