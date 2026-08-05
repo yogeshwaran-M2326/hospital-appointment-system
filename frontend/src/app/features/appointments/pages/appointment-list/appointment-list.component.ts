@@ -287,6 +287,34 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  deleteAppointment(id: number): void {
+    if (confirm('Are you sure you want to delete this appointment?')) {
+      this.appointmentService.deleteAppointment(id).subscribe({
+        next: () => {
+          this.loadAppointments();
+        },
+        error: (err) => {
+          console.error('Error deleting appointment:', err);
+        }
+      });
+    }
+  }
+
+  formatTime(time: string): string {
+    if (!time) return '';
+    // If it's already AM/PM, just return it
+    if (time.includes('AM') || time.includes('PM')) return time;
+    
+    // Parse 24-hour time (e.g., "14:30") to 12-hour AM/PM
+    const [hourStr, minStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour ? hour : 12; // the hour '0' should be '12'
+    const paddedHour = hour < 10 ? '0' + hour : hour.toString();
+    return `${paddedHour}:${minStr} ${ampm}`;
+  }
+
   getInitials(name: string): string {
     if (!name) return 'P';
     const parts = name.trim().split(' ');

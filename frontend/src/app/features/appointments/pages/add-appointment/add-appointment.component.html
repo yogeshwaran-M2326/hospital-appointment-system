@@ -148,15 +148,14 @@
             <label for="appointmentTime" class="text-xs font-bold text-slate-700">
               Appointment Time <span class="text-rose-500 font-bold">*</span>
             </label>
-            <p-select 
-              id="appointmentTime" 
-              formControlName="appointmentTime" 
-              [options]="times" 
-              optionLabel="label" 
-              optionValue="value" 
-              placeholder="Select time slot" 
-              styleClass="w-full">
-            </p-select>
+            <div class="flex items-center w-full h-[40px] bg-white border border-slate-200 rounded-xl px-3.5 gap-2.5 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+              <i class="pi pi-clock text-slate-400 text-xs shrink-0"></i>
+              <input 
+                id="appointmentTime" 
+                type="time" 
+                formControlName="appointmentTime" 
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+            </div>
             <small *ngIf="isFieldInvalid('appointmentTime')" class="text-rose-500 text-[11px] font-semibold">
               Appointment Time is required.
             </small>

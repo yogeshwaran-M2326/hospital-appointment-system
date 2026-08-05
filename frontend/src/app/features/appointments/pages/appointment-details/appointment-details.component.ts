@@ -60,6 +60,19 @@ export class AppointmentDetailsComponent implements OnInit {
     }
   }
 
+  formatTime(time: string): string {
+    if (!time) return '';
+    if (time.includes('AM') || time.includes('PM')) return time;
+    
+    const [hourStr, minStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour ? hour : 12;
+    const paddedHour = hour < 10 ? '0' + hour : hour.toString();
+    return `${paddedHour}:${minStr} ${ampm}`;
+  }
+
   getInitials(name: string): string {
     if (!name) return 'P';
     const parts = name.trim().split(' ');
