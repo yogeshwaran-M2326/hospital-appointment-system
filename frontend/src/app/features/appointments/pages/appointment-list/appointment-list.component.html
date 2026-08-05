@@ -4,30 +4,32 @@
   <div class="w-full max-w-[1850px] mx-auto space-y-5 sm:space-y-7">
 
     <!-- Top Executive Header -->
-    <div class="relative overflow-hidden bg-white/90 backdrop-blur-md p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-5">
+    <div class="relative overflow-hidden bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-[1.5rem] sm:rounded-3xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
       <!-- Background Ambient Glow -->
       <div class="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="flex items-center gap-4 sm:gap-5 relative z-10">
-        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 shrink-0">
-          <i class="pi pi-building font-bold text-xl sm:text-2xl"></i>
+      <!-- Header Content -->
+      <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4 sm:gap-5 relative z-10">
+        <div class="w-16 h-16 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 shrink-0 transform transition-transform hover:scale-105 duration-300">
+          <i class="pi pi-building font-bold text-2xl sm:text-2xl"></i>
         </div>
-        <div>
-          <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Hospital Appointments</h1>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+        <div class="flex flex-col items-center sm:items-start">
+          <div class="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3">
+            <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Hospital Appointments</h1>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 sm:py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-xs">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Live System
             </span>
           </div>
-          <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5 sm:mt-1">Manage patient schedules, filter records, and track statuses efficiently</p>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium mt-2 sm:mt-1 leading-relaxed px-2 sm:px-0 max-w-[280px] sm:max-w-none">Manage patient schedules, filter records, and track statuses efficiently.</p>
         </div>
       </div>
 
+      <!-- Action Button -->
       <button 
         (click)="addAppointment()"
-        class="relative z-10 w-full md:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-bold px-5 sm:px-6 py-3.5 rounded-xl sm:rounded-2xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer text-sm shrink-0">
+        class="relative z-10 w-full md:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-bold px-6 py-4 sm:py-3.5 rounded-[1.25rem] sm:rounded-2xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer text-sm shrink-0">
         <i class="pi pi-plus font-extrabold text-base"></i>
         <span>New Appointment</span>
       </button>
