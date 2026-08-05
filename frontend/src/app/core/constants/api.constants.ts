@@ -1,5 +1,7 @@
+import { environment } from '../../environments/environment';
+
 export const API_CONSTANTS = {
-  BASE_URL: 'https://hospital-appointment-backend.onrender.com/api',
+  BASE_URL: environment.apiUrl,
   APPOINTMENTS: {
     GET_ALL: '/appointments',
     GET_BY_ID: (id: number) => `/appointments/${id}`,
