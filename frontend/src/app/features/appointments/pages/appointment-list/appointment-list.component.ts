@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Appointment } from '../../../../core/models/appointment.model';
@@ -14,8 +16,10 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
   imports: [
     CommonModule, 
     FormsModule,
-    SelectModule
+    SelectModule,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './appointment-list.component.html',
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
@@ -79,11 +83,32 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private appointmentService: AppointmentService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
+    // Check navigation queryParams for success Toast notifications
+    this.route.queryParams.subscribe(params => {
+      if (params['added'] === 'true') {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Appointment Saved!',
+          detail: 'New appointment created successfully.',
+          life: 3500
+        });
+      } else if (params['updated'] === 'true') {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Appointment Updated!',
+          detail: 'Appointment details updated successfully.',
+          life: 3500
+        });
+      }
+    });
+
     // 150ms Fast Debounced search execution for non-empty queries
     this.searchSubscription = this.searchSubject.pipe(
       debounceTime(150),

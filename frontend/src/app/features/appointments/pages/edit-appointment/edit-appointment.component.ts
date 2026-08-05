@@ -198,10 +198,13 @@ export class EditAppointmentComponent implements OnInit {
       next: (res) => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
-          detail: 'Appointment updated successfully'
+          summary: 'Appointment Updated!',
+          detail: 'Appointment details updated successfully.',
+          life: 3000
         });
-        this.router.navigate(['/appointments']);
+        setTimeout(() => {
+          this.router.navigate(['/appointments'], { queryParams: { updated: 'true' } });
+        }, 1000);
       },
       error: (err) => {
         this.isSubmitting = false;
