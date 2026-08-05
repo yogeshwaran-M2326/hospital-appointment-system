@@ -189,7 +189,10 @@ export class EditAppointmentComponent implements OnInit {
 
     let formattedTime = formValue.appointmentTime;
     if (formValue.appointmentTime instanceof Date) {
-      formattedTime = formValue.appointmentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      const d = formValue.appointmentTime;
+      const h = String(d.getHours()).padStart(2, '0');
+      const m = String(d.getMinutes()).padStart(2, '0');
+      formattedTime = `${h}:${m}`;
     }
 
     const updatedAppointment = {
