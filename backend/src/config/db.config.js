@@ -2,19 +2,17 @@ const mongoose = require('mongoose');
 const dns = require('dns');
 require('dotenv').config();
 
-// Fix Windows Node.js DNS SRV resolution for MongoDB Atlas cluster
+// Override DNS for Windows Node.js MongoDB Atlas SRV resolution
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
-} catch (e) {
-  // ignore if override not permitted
-}
+} catch (e) {}
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hospital_appointment_db';
 
 let isMongoConnected = false;
 
-// Default In-Memory Seed Data (Used as initial seed for MongoDB or fallback)
-let inMemoryAppointments = [
+// Initial Seed Data
+const initialAppointments = [
   {
     id: 1,
     patientName: 'John Smith',
@@ -49,29 +47,36 @@ const doctors = [
   { id: 5, label: 'Dr. John Watson (General Medicine)', value: 'Dr. John Watson', department: 'General Medicine' }
 ];
 
-// Connect to MongoDB
+/**
+ * MongoDB Database Connection Function
+ */
 async function connectDB() {
   try {
-    let uriToConnect = MONGODB_URI;
-    // Clean up angle brackets if present
-    uriToConnect = uriToConnect.replace('<Yogesh@23>', 'Yogesh%4023').replace('<', '').replace('>', '');
+    let uri = MONGODB_URI.trim();
 
-    await mongoose.connect(uriToConnect, {
-      serverSelectionTimeoutMS: 5000
-    });
+    try {
+      await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+    } catch (firstErr) {
+      if (uri.includes('%40')) {
+        uri = uri.replace('%40', '@');
+      } else if (uri.includes('Yogesh@23')) {
+        uri = uri.replace('Yogesh@23', 'Yogesh%4023');
+      }
+      await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+    }
+
     isMongoConnected = true;
-    console.log(`[MongoDB]: Successfully connected to MongoDB Atlas Cloud Database!`);
-    
-    // Seed initial MongoDB data if collection is empty
+    console.log('[MongoDB]: Connected to Database Successfully!');
+
     const AppointmentModel = require('../models/appointment.model');
     const count = await AppointmentModel.countDocuments();
     if (count === 0) {
-      await AppointmentModel.insertMany(inMemoryAppointments);
-      console.log('[MongoDB]: Seeded initial appointment records into MongoDB Atlas collection.');
+      await AppointmentModel.insertMany(initialAppointments);
+      console.log('[MongoDB]: Initial Seed Data Created.');
     }
   } catch (error) {
     isMongoConnected = false;
-    console.warn(`[MongoDB Warning]: Could not connect to MongoDB Atlas Cloud. Operating in-memory mode. (${error.message})`);
+    console.error(`[MongoDB Error]: ${error.message}`);
   }
 }
 
@@ -87,7 +92,7 @@ function getStatsFromList(list) {
 module.exports = {
   connectDB,
   isMongoConnected: () => isMongoConnected,
-  inMemoryAppointments,
+  inMemoryAppointments: initialAppointments,
   doctors,
   getNextId: () => nextId++,
   getStatsFromList
