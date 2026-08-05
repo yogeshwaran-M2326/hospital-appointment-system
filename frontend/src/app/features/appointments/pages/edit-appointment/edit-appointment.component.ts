@@ -139,6 +139,24 @@ export class EditAppointmentComponent implements OnInit {
     }
   }
 
+  onlyNumbers(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  onNumberInput(event: Event, fieldName: string): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = input.value.replace(/[^0-9]/g, '');
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
+    this.appointmentForm.get(fieldName)?.setValue(sanitized, { emitEvent: false });
+  }
+
   onSubmit(): void {
     this.isSubmitting = true;
 

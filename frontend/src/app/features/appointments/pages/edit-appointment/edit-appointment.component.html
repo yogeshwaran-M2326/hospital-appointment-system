@@ -111,7 +111,10 @@
               <input 
                 id="contactNumber" 
                 type="text" 
+                inputmode="numeric"
                 formControlName="contactNumber" 
+                (keypress)="onlyNumbers($event)"
+                (input)="onNumberInput($event, 'contactNumber')"
                 placeholder="Enter 10 digit mobile number"
                 maxlength="10"
                 class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
