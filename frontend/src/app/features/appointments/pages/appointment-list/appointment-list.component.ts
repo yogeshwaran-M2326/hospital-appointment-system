@@ -23,6 +23,7 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
   templateUrl: './appointment-list.component.html',
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
+  Math = Math;
   activeActionMenuId: number | null = null;
   appointments: Appointment[] = [];
 
