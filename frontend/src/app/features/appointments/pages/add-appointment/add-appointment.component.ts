@@ -108,10 +108,14 @@ export class AddAppointmentComponent implements OnInit {
 
     const formValue = this.appointmentForm.value;
     
-    // Format date string if Date object
+    // Format date string if Date object (Local Timezone YYYY-MM-DD)
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
-      formattedDate = formValue.appointmentDate.toISOString().split('T')[0];
+      const d = formValue.appointmentDate;
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      formattedDate = `${year}-${month}-${day}`;
     }
 
     const newAppointment = {
