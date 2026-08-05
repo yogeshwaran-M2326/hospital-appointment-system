@@ -46,22 +46,22 @@
     </div>
 
     <!-- Main Details Container -->
-    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 overflow-hidden space-y-6">
+    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 overflow-hidden space-y-4">
       
       <!-- Premium Hero Header Banner -->
-      <div class="p-6 sm:p-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 shadow-inner">
-        <div class="flex items-center gap-5">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-white/15 backdrop-blur-md text-white flex items-center justify-center font-black text-2xl border border-white/20 shadow-md shrink-0">
+      <div class="p-5 sm:p-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-inner">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/15 backdrop-blur-md text-white flex items-center justify-center font-black text-xl border border-white/20 shadow-md shrink-0">
             {{ getInitials(appointment.patientName) }}
           </div>
-          <div class="space-y-1">
-            <div class="flex items-center gap-3 flex-wrap">
-              <h2 class="text-2xl sm:text-3xl font-black tracking-tight">{{ appointment.patientName }}</h2>
-              <span class="px-3 py-1 rounded-full text-xs font-mono font-extrabold bg-white/20 text-white backdrop-blur-md border border-white/20">
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h2 class="text-xl sm:text-2xl font-black tracking-tight">{{ appointment.patientName }}</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-extrabold bg-white/20 text-white backdrop-blur-md border border-white/20">
                 #{{ appointment.id }}
               </span>
             </div>
-            <p class="text-xs sm:text-sm text-blue-100/90 font-semibold">Registered Patient Appointment</p>
+            <p class="text-xs text-blue-100/90 font-semibold">Registered Patient Appointment</p>
           </div>
         </div>
 
@@ -69,48 +69,48 @@
         <div>
           <span 
             *ngIf="appointment.status === 'Scheduled'" 
-            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-sky-500/25 border border-sky-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2.5 h-2.5 rounded-full bg-sky-300 animate-pulse"></span>
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-sky-500/25 border border-sky-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-sky-300 animate-pulse"></span>
             Scheduled
           </span>
 
           <span 
             *ngIf="appointment.status === 'Completed'" 
-            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-emerald-500/25 border border-emerald-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-300"></span>
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500/25 border border-emerald-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
             Completed
           </span>
 
           <span 
             *ngIf="appointment.status === 'Cancelled'" 
-            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-rose-500/25 border border-rose-300/60 text-white backdrop-blur-md shadow-sm">
-            <span class="w-2.5 h-2.5 rounded-full bg-rose-300"></span>
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-rose-500/25 border border-rose-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-rose-300"></span>
             Cancelled
           </span>
         </div>
       </div>
 
-      <!-- Information Cards Grid (Spacious 2-Column / 3-Column Responsive Grid) -->
-      <div class="px-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Information Cards Grid (Compact Height 2-Column / 3-Column Responsive Grid) -->
+      <div class="px-5 sm:px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <!-- 1. Patient Information Card -->
-        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-blue-200 transition-colors shadow-2xs">
-          <div class="flex items-center gap-2.5 text-blue-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
-            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+        <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/70 space-y-3 hover:border-blue-200 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2 text-blue-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-2">
+            <div class="w-6 h-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
               <i class="pi pi-user"></i>
             </div>
             <span>Patient Information</span>
           </div>
 
-          <div class="space-y-3.5">
+          <div class="space-y-2">
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Patient Full Name</p>
-              <p class="font-bold text-slate-900 text-base mt-1">{{ appointment.patientName }}</p>
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Patient Full Name</p>
+              <p class="font-bold text-slate-900 text-sm mt-0.5">{{ appointment.patientName }}</p>
             </div>
 
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Mobile Contact</p>
-              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-mono text-sm font-bold text-slate-800 shadow-2xs">
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Mobile Contact</p>
+              <div class="inline-flex items-center gap-1.5 mt-0.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200/70 font-mono text-xs font-bold text-slate-800 shadow-2xs">
                 <i class="pi pi-phone text-blue-500 text-xs"></i>
                 <span>{{ appointment.contactNumber }}</span>
               </div>
@@ -119,24 +119,24 @@
         </div>
 
         <!-- 2. Doctor Information Card -->
-        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-indigo-200 transition-colors shadow-2xs">
-          <div class="flex items-center gap-2.5 text-indigo-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
-            <div class="w-7 h-7 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">
+        <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/70 space-y-3 hover:border-indigo-200 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2 text-indigo-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-2">
+            <div class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">
               <i class="pi pi-user-edit"></i>
             </div>
             <span>Doctor & Department</span>
           </div>
 
-          <div class="space-y-3.5">
+          <div class="space-y-2">
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Assigned Doctor</p>
-              <p class="font-bold text-slate-900 text-base mt-1">{{ appointment.doctorName }}</p>
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Assigned Doctor</p>
+              <p class="font-bold text-slate-900 text-sm mt-0.5">{{ appointment.doctorName }}</p>
             </div>
 
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Medical Department</p>
-              <div class="mt-1">
-                <span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-indigo-100/80 text-indigo-700 border border-indigo-200/60 shadow-2xs">
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Medical Department</p>
+              <div class="mt-0.5">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-extrabold bg-indigo-100/80 text-indigo-700 border border-indigo-200/60 shadow-2xs">
                   {{ appointment.department }}
                 </span>
               </div>
@@ -145,26 +145,26 @@
         </div>
 
         <!-- 3. Schedule Information Card -->
-        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-emerald-200 transition-colors shadow-2xs md:col-span-2 lg:col-span-1">
-          <div class="flex items-center gap-2.5 text-emerald-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
-            <div class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+        <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/70 space-y-3 hover:border-emerald-200 transition-colors shadow-2xs md:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-2 text-emerald-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-2">
+            <div class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
               <i class="pi pi-calendar"></i>
             </div>
             <span>Schedule & Timing</span>
           </div>
 
-          <div class="space-y-3.5">
+          <div class="space-y-2">
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Scheduled Date</p>
-              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-semibold text-sm text-slate-900 shadow-2xs">
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Scheduled Date</p>
+              <div class="inline-flex items-center gap-1.5 mt-0.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200/70 font-semibold text-xs text-slate-900 shadow-2xs">
                 <i class="pi pi-calendar-plus text-emerald-500 text-xs"></i>
                 <span>{{ appointment.appointmentDate }}</span>
               </div>
             </div>
 
             <div>
-              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Time Slot</p>
-              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-semibold text-sm text-slate-900 shadow-2xs">
+              <p class="text-slate-400 text-[10px] font-extrabold uppercase tracking-wider">Time Slot</p>
+              <div class="inline-flex items-center gap-1.5 mt-0.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200/70 font-semibold text-xs text-slate-900 shadow-2xs">
                 <i class="pi pi-clock text-amber-500 text-xs"></i>
                 <span>{{ appointment.appointmentTime }}</span>
               </div>
@@ -174,17 +174,17 @@
 
       </div>
 
-      <!-- 4. Symptoms / Visit Notes & Description (Spacious Full Width Section) -->
-      <div class="px-6 pb-8 sm:px-8">
-        <div class="bg-gradient-to-br from-slate-50 via-slate-50 to-blue-50/30 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 space-y-3 shadow-2xs">
-          <div class="flex items-center gap-2.5 text-slate-700 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
-            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+      <!-- 4. Symptoms / Visit Notes & Description (Compact Full Width Section) -->
+      <div class="px-5 pb-6 sm:px-6">
+        <div class="bg-gradient-to-br from-slate-50 via-slate-50 to-blue-50/30 p-4 sm:p-5 rounded-2xl border border-slate-200/80 space-y-2 shadow-2xs">
+          <div class="flex items-center gap-2 text-slate-700 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-2">
+            <div class="w-6 h-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
               <i class="pi pi-file-edit"></i>
             </div>
             <span>Description / Visit Notes & Symptoms</span>
           </div>
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-2xs">
-            <p class="text-sm sm:text-base text-slate-800 font-semibold leading-relaxed">
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/70 shadow-2xs">
+            <p class="text-xs sm:text-sm text-slate-800 font-semibold leading-relaxed">
               {{ appointment.description && appointment.description.trim() ? appointment.description : 'No additional symptoms or notes recorded for this appointment.' }}
             </p>
           </div>
