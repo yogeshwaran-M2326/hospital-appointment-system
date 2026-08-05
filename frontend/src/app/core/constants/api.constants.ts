@@ -1,5 +1,5 @@
 export const API_CONSTANTS = {
-  BASE_URL: https://hospital-appointment-backend.onrender.com/api,
+  BASE_URL: 'https://hospital-appointment-backend.onrender.com/api',
   APPOINTMENTS: {
     GET_ALL: '/appointments',
     GET_BY_ID: (id: number) => `/appointments/${id}`,
