@@ -35,8 +35,8 @@ export class AppointmentDetailsComponent implements OnInit {
     this.hasError = false;
 
     this.appointmentService.getAppointmentById(id).subscribe({
-      next: (data) => {
-        this.appointment = data;
+      next: (res) => {
+        this.appointment = res.data || res;
         this.isLoading = false;
       },
       error: (err) => {
