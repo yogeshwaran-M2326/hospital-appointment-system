@@ -1,8 +1,12 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Appointment } from '../../../../core/models/appointment.model';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 
@@ -12,11 +16,14 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
   imports: [
     CommonModule, 
     FormsModule,
-    SelectModule
+    SelectModule,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './appointment-list.component.html',
 })
-export class AppointmentListComponent implements OnInit {
+export class AppointmentListComponent implements OnInit, OnDestroy {
+  Math = Math;
   activeActionMenuId: number | null = null;
   appointments: Appointment[] = [];
 
@@ -36,7 +43,12 @@ export class AppointmentListComponent implements OnInit {
 
   // Screen States (Screen 6, 7, 8)
   isLoading: boolean = false;
+  isTableUpdating: boolean = false;
   hasError: boolean = false;
+
+  // Debounced Search Subject
+  private searchSubject = new Subject<string>();
+  private searchSubscription!: Subscription;
 
   // Screen 5: Delete Confirmation Modal State
   showDeleteModal: boolean = false;
@@ -72,22 +84,65 @@ export class AppointmentListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private appointmentService: AppointmentService
+    private route: ActivatedRoute,
+    private appointmentService: AppointmentService,
+    private cdr: ChangeDetectorRef,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-    this.loadAppointments();
+    // Check navigation queryParams for rich success Toast notifications
+    this.route.queryParams.subscribe(params => {
+      const patientName = params['name'] || 'Patient';
+      if (params['added'] === 'true') {
+        this.messageService.add({
+          severity: 'success',
+          summary: '🎉 Appointment Booked!',
+          detail: `Appointment record for ${patientName} saved successfully.`,
+          life: 4000
+        });
+      } else if (params['updated'] === 'true') {
+        this.messageService.add({
+          severity: 'success',
+          summary: '✨ Appointment Updated!',
+          detail: `Record details for ${patientName} updated successfully.`,
+          life: 4000
+        });
+      }
+    });
+
+    // 150ms Fast Debounced search execution for non-empty queries
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(150),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.currentPage = 1;
+      this.loadAppointments(false);
+    });
+
+    this.loadAppointments(true);
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 
   // Load Appointments via API (Server-side Search, Filtering, Sorting & Pagination)
-  loadAppointments(): void {
-    this.isLoading = true;
+  loadAppointments(isInitial: boolean = false): void {
+    if (isInitial) {
+      this.isLoading = true;
+    } else {
+      this.isTableUpdating = true;
+    }
     this.hasError = false;
+    this.cdr.detectChanges();
 
     this.appointmentService.getAppointments({
       page: this.currentPage,
       pageSize: this.pageSize,
-      search: this.searchTerm,
+      search: this.searchTerm ? this.searchTerm.trim() : undefined,
       department: this.selectedDepartment || undefined,
       status: this.selectedStatus || undefined,
       sortField: this.sortField || undefined,
@@ -95,6 +150,7 @@ export class AppointmentListComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         this.isLoading = false;
+        this.isTableUpdating = false;
         this.appointments = res.data || [];
         this.totalRecords = res.totalRecords || 0;
         this.currentPage = res.currentPage || 1;
@@ -102,33 +158,49 @@ export class AppointmentListComponent implements OnInit {
         if (res.stats) {
           this.stats = res.stats;
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.isLoading = false;
+        this.isTableUpdating = false;
         this.hasError = true;
+        this.cdr.detectChanges();
       }
     });
   }
 
   onSearch(): void {
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      // Empty search term -> Immediately load full data (0ms delay)
+      this.currentPage = 1;
+      this.loadAppointments(false);
+    } else {
+      // Non-empty search term -> Fast 150ms debounce
+      this.searchSubject.next(this.searchTerm);
+    }
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
+    this.cdr.detectChanges();
   }
 
   onFilterChange(): void {
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   onPageSizeChange(): void {
     this.currentPage = 1;
-    this.loadAppointments();
+    this.loadAppointments(false);
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadAppointments();
+      this.loadAppointments(false);
     }
   }
 
@@ -140,7 +212,8 @@ export class AppointmentListComponent implements OnInit {
     this.sortOrder = 'asc';
     this.currentPage = 1;
     this.hasError = false;
-    this.loadAppointments();
+    this.loadAppointments(false);
+    this.cdr.detectChanges();
   }
 
   retryFetch(): void {
@@ -195,7 +268,13 @@ export class AppointmentListComponent implements OnInit {
 
   confirmDelete(): void {
     if (this.appointmentToDelete && this.appointmentToDelete.id) {
-      this.appointmentService.deleteAppointment(this.appointmentToDelete.id).subscribe({
+      const idToDelete = this.appointmentToDelete.id;
+      // Optimistically remove from view immediately for instant response
+      this.appointments = this.appointments.filter(a => a.id !== idToDelete);
+      this.totalRecords = Math.max(0, this.totalRecords - 1);
+      this.cdr.detectChanges();
+
+      this.appointmentService.deleteAppointment(idToDelete).subscribe({
         next: () => {
           this.loadAppointments();
         },
@@ -206,6 +285,35 @@ export class AppointmentListComponent implements OnInit {
     }
     this.showDeleteModal = false;
     this.appointmentToDelete = null;
+    this.cdr.detectChanges();
+  }
+
+  deleteAppointment(id: number): void {
+    if (confirm('Are you sure you want to delete this appointment?')) {
+      this.appointmentService.deleteAppointment(id).subscribe({
+        next: () => {
+          this.loadAppointments();
+        },
+        error: (err) => {
+          console.error('Error deleting appointment:', err);
+        }
+      });
+    }
+  }
+
+  formatTime(time: string): string {
+    if (!time) return '';
+    // If it's already AM/PM, just return it
+    if (time.includes('AM') || time.includes('PM')) return time;
+    
+    // Parse 24-hour time (e.g., "14:30") to 12-hour AM/PM
+    const [hourStr, minStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour ? hour : 12; // the hour '0' should be '12'
+    const paddedHour = hour < 10 ? '0' + hour : hour.toString();
+    return `${paddedHour}:${minStr} ${ampm}`;
   }
 
   getInitials(name: string): string {

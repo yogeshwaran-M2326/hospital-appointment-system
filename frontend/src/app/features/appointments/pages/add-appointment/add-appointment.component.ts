@@ -13,6 +13,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AppointmentService } from '../../../../core/services/appointment.service';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @Component({
   selector: 'app-add-appointment',
@@ -27,7 +28,8 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
     ButtonModule,
     CardModule,
     MessageModule,
-    ToastModule
+    ToastModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [MessageService],
   templateUrl: './add-appointment.component.html',
@@ -35,6 +37,22 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
 export class AddAppointmentComponent implements OnInit {
   appointmentForm!: FormGroup;
   isSubmitting = false;
+
+  // Custom Theme for the Timepicker to match Tailwind Blue-500
+  timepickerTheme = {
+    container: {
+        bodyBackgroundColor: '#ffffff',
+        buttonColor: '#3b82f6'
+    },
+    dial: {
+        dialBackgroundColor: '#3b82f6',
+    },
+    clockFace: {
+        clockFaceBackgroundColor: '#f1f5f9',
+        clockHandColor: '#3b82f6',
+        clockFaceTimeInactiveColor: '#475569'
+    }
+  };
 
   departments = [
     { label: 'Cardiology', value: 'Cardiology' },
@@ -80,16 +98,44 @@ export class AddAppointmentComponent implements OnInit {
       doctorName: ['', [Validators.required]],
       department: ['', [Validators.required]],
       appointmentDate: [null, [Validators.required]],
-      appointmentTime: ['', [Validators.required]],
+      appointmentTime: [null, [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       status: ['Scheduled', [Validators.required]],
-      description: ['']
+      description: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.appointmentForm.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched || this.isSubmitting));
+  }
+
+  onInputCapitalize(fieldName: string): void {
+    const value = this.appointmentForm.get(fieldName)?.value;
+    if (value && typeof value === 'string') {
+      const capitalized = value.replace(/\b\w/g, (char: string) => char.toUpperCase());
+      if (value !== capitalized) {
+        this.appointmentForm.get(fieldName)?.setValue(capitalized, { emitEvent: false });
+      }
+    }
+  }
+
+  onlyNumbers(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  onNumberInput(event: Event, fieldName: string): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = input.value.replace(/[^0-9]/g, '');
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
+    this.appointmentForm.get(fieldName)?.setValue(sanitized, { emitEvent: false });
   }
 
   onSubmit(): void {
@@ -108,27 +154,50 @@ export class AddAppointmentComponent implements OnInit {
 
     const formValue = this.appointmentForm.value;
     
-    // Format date string if Date object
+    // Auto-capitalize first letter of patientName & description
+    const patientName = formValue.patientName ? formValue.patientName.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
+    const description = formValue.description ? formValue.description.trim().replace(/\b\w/g, (c: string) => c.toUpperCase()) : '';
+
+    // Format date string if Date object (Local Timezone YYYY-MM-DD)
     let formattedDate = formValue.appointmentDate;
     if (formValue.appointmentDate instanceof Date) {
-      formattedDate = formValue.appointmentDate.toISOString().split('T')[0];
+      const d = formValue.appointmentDate;
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      formattedDate = `${year}-${month}-${day}`;
+    }
+
+    let formattedTime = formValue.appointmentTime;
+    if (formValue.appointmentTime instanceof Date) {
+      const d = formValue.appointmentTime;
+      let h = d.getHours();
+      let m = String(d.getMinutes()).padStart(2, '0');
+      let ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12;
+      h = h ? h : 12; // the hour '0' should be '12'
+      formattedTime = `${String(h).padStart(2, '0')}:${m} ${ampm}`;
     }
 
     const newAppointment = {
       ...formValue,
-      appointmentDate: formattedDate
+      patientName,
+      description,
+      appointmentDate: formattedDate,
+      appointmentTime: formattedTime
     };
 
     this.appointmentService.createAppointment(newAppointment).subscribe({
       next: (res) => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
-          detail: 'Appointment created successfully'
+          summary: '🎉 Appointment Booked Successfully!',
+          detail: `Appointment scheduled for ${patientName} with ${newAppointment.doctorName}`,
+          life: 4000
         });
         setTimeout(() => {
-          this.router.navigate(['/appointments']);
-        }, 1000);
+          this.router.navigate(['/appointments'], { queryParams: { added: 'true', name: patientName } });
+        }, 1100);
       },
       error: (err) => {
         this.isSubmitting = false;

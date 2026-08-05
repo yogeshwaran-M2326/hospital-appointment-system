@@ -50,8 +50,10 @@
                 id="patientName" 
                 type="text" 
                 formControlName="patientName" 
+                (input)="onInputCapitalize('patientName')"
+                autocapitalize="words"
                 placeholder="Enter patient full name"
-                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0 capitalize" />
             </div>
             <small *ngIf="isFieldInvalid('patientName')" class="text-rose-500 text-[11px] font-semibold">
               <span *ngIf="appointmentForm.get('patientName')?.errors?.['required']">Patient Name is required.</span>
@@ -107,7 +109,10 @@
               <input 
                 id="contactNumber" 
                 type="text" 
+                inputmode="numeric"
                 formControlName="contactNumber" 
+                (keypress)="onlyNumbers($event)"
+                (input)="onNumberInput($event, 'contactNumber')"
                 placeholder="Enter 10 digit mobile number"
                 maxlength="10"
                 class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
@@ -143,15 +148,18 @@
             <label for="appointmentTime" class="text-xs font-bold text-slate-700">
               Appointment Time <span class="text-rose-500 font-bold">*</span>
             </label>
-            <p-select 
-              id="appointmentTime" 
-              formControlName="appointmentTime" 
-              [options]="times" 
-              optionLabel="label" 
-              optionValue="value" 
-              placeholder="Select time slot" 
-              styleClass="w-full">
-            </p-select>
+            <div class="flex items-center w-full h-[44px] bg-slate-50 hover:bg-white border border-slate-200 hover:border-blue-400 rounded-xl px-4 gap-3 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/15 transition-all shadow-sm cursor-pointer" (click)="picker.open()">
+              <div class="w-6 h-6 rounded-md bg-blue-100/50 text-blue-500 flex items-center justify-center shrink-0">
+                <i class="pi pi-clock text-xs"></i>
+              </div>
+              <input 
+                [ngxTimepicker]="picker" 
+                formControlName="appointmentTime" 
+                class="w-full bg-transparent border-none text-sm font-bold text-slate-800 placeholder:text-slate-400 outline-none p-0 cursor-pointer pointer-events-none" 
+                placeholder="Select time" 
+                readonly />
+              <ngx-material-timepicker #picker [theme]="timepickerTheme"></ngx-material-timepicker>
+            </div>
             <small *ngIf="isFieldInvalid('appointmentTime')" class="text-rose-500 text-[11px] font-semibold">
               Appointment Time is required.
             </small>
@@ -179,7 +187,7 @@
           <!-- 8. Description / Notes Field -->
           <div class="flex flex-col gap-1 col-span-1">
             <label for="description" class="text-xs font-bold text-slate-700">
-              Description / Notes
+              Description / Notes <span class="text-rose-500 font-bold">*</span>
             </label>
             <div class="flex items-center w-full h-[40px] bg-white border border-slate-200 rounded-xl px-3.5 gap-2.5 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
               <i class="pi pi-align-left text-slate-400 text-xs shrink-0"></i>
@@ -187,9 +195,15 @@
                 id="description" 
                 type="text" 
                 formControlName="description" 
+                (input)="onInputCapitalize('description')"
+                autocapitalize="sentences"
                 placeholder="Enter symptoms or visit notes"
-                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0" />
+                class="w-full bg-transparent border-none text-xs md:text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none p-0 capitalize" />
             </div>
+            <small *ngIf="isFieldInvalid('description')" class="text-rose-500 text-[11px] font-semibold">
+              <span *ngIf="appointmentForm.get('description')?.errors?.['required']">Description / Visit Notes is required.</span>
+              <span *ngIf="appointmentForm.get('description')?.errors?.['minlength']">Description must be at least 3 characters.</span>
+            </small>
           </div>
 
         </div>
