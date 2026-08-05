@@ -1,167 +1,193 @@
-<div class="min-h-screen bg-slate-50/70 p-4 md:p-8">
-  <div class="max-w-4xl mx-auto space-y-6">
+<div class="min-h-screen bg-slate-50/80 p-4 md:p-8">
+  <div class="max-w-5xl mx-auto space-y-6">
 
-    <!-- Top Header -->
-    <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
-      <div class="flex items-center gap-3.5">
-        <button (click)="goBack()" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer">
-          <i class="pi pi-arrow-left text-sm"></i>
+    <!-- Navigation Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button (click)="goBack()" title="Back to Appointments" class="w-11 h-11 rounded-2xl bg-slate-100/80 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-200/60 active:scale-95">
+          <i class="pi pi-arrow-left text-base"></i>
         </button>
         <div>
-          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Appointment Details</h1>
-          <p class="text-xs md:text-sm text-slate-500 font-medium">View full patient and schedule information</p>
+          <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Appointment Details</h1>
+          <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Comprehensive view of patient booking and visit record</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
-        <button (click)="editAppointment()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-xs transition-all text-sm cursor-pointer">
+        <button (click)="editAppointment()" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl sm:rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm cursor-pointer active:scale-95">
           <i class="pi pi-pencil text-xs"></i>
-          <span>Edit</span>
+          <span>Edit Appointment</span>
         </button>
       </div>
     </div>
 
-    <!-- Loading State (Screen 6) -->
-    <div *ngIf="isLoading" class="bg-white rounded-2xl border border-slate-100 p-12 text-center shadow-xs">
-      <div class="flex flex-col items-center justify-center gap-3">
-        <div class="w-12 h-12 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin"></div>
-        <p class="text-slate-600 font-semibold text-sm">Loading appointment details...</p>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="bg-white rounded-3xl border border-slate-200/80 p-16 text-center shadow-sm">
+      <div class="flex flex-col items-center justify-center gap-4">
+        <div class="w-12 h-12 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
+        <p class="text-slate-700 font-bold text-sm">Loading appointment details...</p>
       </div>
     </div>
 
-    <!-- Error State (Screen 8) -->
-    <div *ngIf="hasError && !isLoading" class="bg-white rounded-2xl border border-rose-100 p-12 text-center shadow-xs">
-      <div class="flex flex-col items-center justify-center gap-3">
-        <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-2xl">
+    <!-- Error State -->
+    <div *ngIf="hasError && !isLoading" class="bg-white rounded-3xl border border-rose-200/80 p-16 text-center shadow-sm">
+      <div class="flex flex-col items-center justify-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-3xl">
           <i class="pi pi-exclamation-triangle"></i>
         </div>
-        <h3 class="text-lg font-extrabold text-slate-800">Unable to process your request</h3>
-        <p class="text-xs text-slate-500">Please try again later.</p>
-        <button (click)="fetchDetails(appointmentId)" class="mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs transition-all">
-          Retry
+        <div>
+          <h3 class="text-lg font-black text-slate-900">Unable to load appointment details</h3>
+          <p class="text-xs text-slate-500 mt-1">Please try again or return to appointments list.</p>
+        </div>
+        <button (click)="fetchDetails(appointmentId)" class="mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs transition-all cursor-pointer border border-slate-200">
+          Retry Request
         </button>
       </div>
     </div>
 
-    <!-- Details Card Container -->
-    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
+    <!-- Main Details Container -->
+    <div *ngIf="appointment && !isLoading && !hasError" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 overflow-hidden space-y-6">
       
-      <!-- Top Banner -->
-      <div class="p-6 md:p-8 bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center font-black text-xl border border-white/30">
+      <!-- Premium Hero Header Banner -->
+      <div class="p-6 sm:p-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 shadow-inner">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-white/15 backdrop-blur-md text-white flex items-center justify-center font-black text-2xl border border-white/20 shadow-md shrink-0">
             {{ getInitials(appointment.patientName) }}
           </div>
-          <div>
-            <h2 class="text-2xl font-black">{{ appointment.patientName }}</h2>
-            <p class="text-xs text-blue-100 font-medium mt-1">Appointment ID: #{{ appointment.id }}</p>
+          <div class="space-y-1">
+            <div class="flex items-center gap-3 flex-wrap">
+              <h2 class="text-2xl sm:text-3xl font-black tracking-tight">{{ appointment.patientName }}</h2>
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-extrabold bg-white/20 text-white backdrop-blur-md border border-white/20">
+                #{{ appointment.id }}
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-blue-100/90 font-semibold">Registered Patient Appointment</p>
           </div>
         </div>
 
-        <!-- Status Tag (Screen 4 requirement) -->
+        <!-- Status Tag -->
         <div>
           <span 
             *ngIf="appointment.status === 'Scheduled'" 
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold bg-sky-500/20 border border-sky-300 text-white backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-sky-300 animate-pulse"></span>
+            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-sky-500/25 border border-sky-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-300 animate-pulse"></span>
             Scheduled
           </span>
 
           <span 
             *ngIf="appointment.status === 'Completed'" 
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold bg-emerald-500/20 border border-emerald-300 text-white backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-emerald-500/25 border border-emerald-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-300"></span>
             Completed
           </span>
 
           <span 
             *ngIf="appointment.status === 'Cancelled'" 
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold bg-rose-500/20 border border-rose-300 text-white backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-rose-300"></span>
+            class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-extrabold bg-rose-500/25 border border-rose-300/60 text-white backdrop-blur-md shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-300"></span>
             Cancelled
           </span>
         </div>
       </div>
 
-      <!-- Detail Sections Grid -->
-      <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Information Cards Grid (Spacious 2-Column / 3-Column Responsive Grid) -->
+      <div class="px-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- 1. Patient Information -->
-        <div class="bg-slate-50/80 p-5 rounded-2xl border border-slate-100 space-y-3">
-          <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
-            <i class="pi pi-user"></i>
+        <!-- 1. Patient Information Card -->
+        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-blue-200 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2.5 text-blue-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
+            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+              <i class="pi pi-user"></i>
+            </div>
             <span>Patient Information</span>
           </div>
 
-          <div class="space-y-2 text-xs">
+          <div class="space-y-3.5">
             <div>
-              <p class="text-slate-400 font-medium">Full Name</p>
-              <p class="font-bold text-slate-800 text-sm mt-0.5">{{ appointment.patientName }}</p>
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Patient Full Name</p>
+              <p class="font-bold text-slate-900 text-base mt-1">{{ appointment.patientName }}</p>
             </div>
+
             <div>
-              <p class="text-slate-400 font-medium">Contact Number</p>
-              <p class="font-bold text-slate-800 text-sm mt-0.5 flex items-center gap-1.5">
-                <i class="pi pi-phone text-slate-400 text-xs"></i>
-                {{ appointment.contactNumber }}
-              </p>
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Mobile Contact</p>
+              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-mono text-sm font-bold text-slate-800 shadow-2xs">
+                <i class="pi pi-phone text-blue-500 text-xs"></i>
+                <span>{{ appointment.contactNumber }}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 2. Doctor Information -->
-        <div class="bg-slate-50/80 p-5 rounded-2xl border border-slate-100 space-y-3">
-          <div class="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
-            <i class="pi pi-user-edit"></i>
-            <span>Doctor Information</span>
+        <!-- 2. Doctor Information Card -->
+        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-indigo-200 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2.5 text-indigo-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
+            <div class="w-7 h-7 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">
+              <i class="pi pi-user-edit"></i>
+            </div>
+            <span>Doctor & Department</span>
           </div>
 
-          <div class="space-y-2 text-xs">
+          <div class="space-y-3.5">
             <div>
-              <p class="text-slate-400 font-medium">Assigned Doctor</p>
-              <p class="font-bold text-slate-800 text-sm mt-0.5">{{ appointment.doctorName }}</p>
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Assigned Doctor</p>
+              <p class="font-bold text-slate-900 text-base mt-1">{{ appointment.doctorName }}</p>
             </div>
+
             <div>
-              <p class="text-slate-400 font-medium">Department</p>
-              <p class="font-bold text-blue-700 text-sm mt-0.5">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100 font-bold">
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Medical Department</p>
+              <div class="mt-1">
+                <span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-indigo-100/80 text-indigo-700 border border-indigo-200/60 shadow-2xs">
                   {{ appointment.department }}
                 </span>
-              </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. Appointment Details -->
-        <div class="bg-slate-50/80 p-5 rounded-2xl border border-slate-100 space-y-3">
-          <div class="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider">
-            <i class="pi pi-calendar"></i>
-            <span>Appointment Details</span>
+        <!-- 3. Schedule Information Card -->
+        <div class="bg-slate-50/90 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/70 space-y-4 hover:border-emerald-200 transition-colors shadow-2xs md:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-2.5 text-emerald-600 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
+            <div class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+              <i class="pi pi-calendar"></i>
+            </div>
+            <span>Schedule & Timing</span>
           </div>
 
-          <div class="space-y-2 text-xs">
+          <div class="space-y-3.5">
             <div>
-              <p class="text-slate-400 font-medium">Scheduled Date</p>
-              <p class="font-bold text-slate-800 text-sm mt-0.5">{{ appointment.appointmentDate }}</p>
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Scheduled Date</p>
+              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-semibold text-sm text-slate-900 shadow-2xs">
+                <i class="pi pi-calendar-plus text-emerald-500 text-xs"></i>
+                <span>{{ appointment.appointmentDate }}</span>
+              </div>
             </div>
+
             <div>
-              <p class="text-slate-400 font-medium">Scheduled Time</p>
-              <p class="font-bold text-slate-800 text-sm mt-0.5">{{ appointment.appointmentTime }}</p>
+              <p class="text-slate-400 text-[11px] font-extrabold uppercase tracking-wider">Time Slot</p>
+              <div class="inline-flex items-center gap-2 mt-1 px-3 py-1.5 rounded-xl bg-white border border-slate-200/70 font-semibold text-sm text-slate-900 shadow-2xs">
+                <i class="pi pi-clock text-amber-500 text-xs"></i>
+                <span>{{ appointment.appointmentTime }}</span>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
 
-      <!-- 4. Patient Symptoms / Visit Notes & Description (Requirement Highlight) -->
-      <div class="px-6 pb-6 md:px-8 md:pb-8">
-        <div class="bg-gradient-to-r from-slate-50 to-blue-50/40 p-5 sm:p-6 rounded-2xl border border-slate-200/70 shadow-xs space-y-2">
-          <div class="flex items-center gap-2 text-slate-700 font-bold text-xs uppercase tracking-wider">
-            <i class="pi pi-file-edit text-blue-600"></i>
+      <!-- 4. Symptoms / Visit Notes & Description (Spacious Full Width Section) -->
+      <div class="px-6 pb-8 sm:px-8">
+        <div class="bg-gradient-to-br from-slate-50 via-slate-50 to-blue-50/30 p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 space-y-3 shadow-2xs">
+          <div class="flex items-center gap-2.5 text-slate-700 font-extrabold text-xs uppercase tracking-wider border-b border-slate-200/60 pb-3">
+            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+              <i class="pi pi-file-edit"></i>
+            </div>
             <span>Description / Visit Notes & Symptoms</span>
           </div>
-          <p class="text-sm text-slate-800 font-medium leading-relaxed bg-white/90 p-4 rounded-xl border border-slate-200/60 shadow-xs">
-            {{ appointment.description && appointment.description.trim() ? appointment.description : 'No additional symptoms or notes recorded for this appointment.' }}
-          </p>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-2xs">
+            <p class="text-sm sm:text-base text-slate-800 font-semibold leading-relaxed">
+              {{ appointment.description && appointment.description.trim() ? appointment.description : 'No additional symptoms or notes recorded for this appointment.' }}
+            </p>
+          </div>
         </div>
       </div>
 
