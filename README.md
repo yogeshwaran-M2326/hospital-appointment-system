@@ -49,7 +49,7 @@ cd backend
 npm install
 node server.js
 ```
-*Backend API server runs on:* `http://localhost:3000/api`
+*Backend API server runs on:* `https://hospital-appointment-backend.onrender.com/api`
 
 ### 2. Start the Angular Frontend Application
 ```bash
